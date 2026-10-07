@@ -3,6 +3,7 @@ import type { ObjectiveData } from '../levels/LevelData';
 import { GameStatus, type GameStateData, GameState } from './GameState';
 import { Board, type BoardConfig } from './Board';
 import { MatchFinder } from './MatchFinder';
+import { Scoring } from './Scoring';
 import { SpecialType } from '../types/SpecialType';
 
 export interface AnimationStep {
@@ -77,29 +78,35 @@ export class GameManager {
 
   private processMatches(
     matches: Match[],
-    specials: ReturnType<typeof MatchFinder.findMatchesWithSpecials>['specialPieces']
+    specials: ReturnType<typeof MatchFinder.findMatchesWithSpecials>['specialPieces'],
+    cascadeNumber: number = 1
   ): void {
-    this.animationSteps = [];
-    let cascade = 1;
-    let scoreGained = 0;
+    if (cascadeNumber === 1) {
+      this.animationSteps = [];
+    }
+
+    // Compute score for this cascade
+    const scoreResult = Scoring.calculateCascadeScore(matches, cascadeNumber);
+    const scoreGained = scoreResult.points;
+    this.state.score += scoreGained;
+    this.state.scoreAdded += scoreGained;
 
     // Remove matched pieces
     const destroyed = this.board.removeMatches(matches);
-    this.state.scoreAdded += scoreGained;
 
     this.animationSteps.push({
       command: {
         id: this.nextAnimationId(),
         type: 'DESTROY',
         duration: 300,
-        delay: 0,
+        delay: (cascadeNumber - 1) * 600,
         targets: destroyed.map((p) => `${p.row},${p.col}`),
       },
       duration: 300,
     });
 
     // Update objectives based on destroyed pieces
-    this.updateObjectives(destroyed, matches);
+    this.updateObjectives(destroyed, matches, scoreGained);
 
     // Apply gravity
     const moved = this.board.applyGravity();
@@ -109,7 +116,7 @@ export class GameManager {
           id: this.nextAnimationId(),
           type: 'MOVE',
           duration: 250,
-          delay: 300,
+          delay: (cascadeNumber - 1) * 600 + 300,
           targets: moved.map((p) => `${p.row},${p.col}`),
           params: { fromY: 0 },
         },
@@ -125,7 +132,7 @@ export class GameManager {
           id: this.nextAnimationId(),
           type: 'SPAWN',
           duration: 250,
-          delay: 550,
+          delay: (cascadeNumber - 1) * 600 + 550,
           targets: spawned.map((p) => `${p.row},${p.col}`),
         },
         duration: 250,
@@ -135,15 +142,14 @@ export class GameManager {
     // Check for cascade
     const newMatches = this.board.findMatches();
     if (newMatches.matches.length > 0) {
-      cascade++;
-      this.processMatches(newMatches.matches, newMatches.specials);
+      this.processMatches(newMatches.matches, newMatches.specials, cascadeNumber + 1);
     } else {
       // No more cascades, check win/lose
       this.checkGameOver();
     }
   }
 
-  private updateObjectives(destroyed: Point[], matches: Match[]): void {
+  private updateObjectives(destroyed: Point[], matches: Match[], scoreDelta: number): void {
     const colorCounts: Record<string, number> = {};
 
     for (const match of matches) {
@@ -158,13 +164,15 @@ export class GameManager {
           }
           break;
         case 'reach_score':
-          // Score handled separately
+          obj.current += scoreDelta;
           break;
         case 'remove_blocker':
-          // Count destroyed obstacle cells
+          // Count destroyed obstacle cells (approximate via match count)
+          obj.current += matches.length;
           break;
         case 'collect_item':
           // Items collected via special piece effects
+          obj.current += Math.floor(matches.length / 3);
           break;
         default:
           break;
