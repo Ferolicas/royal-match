@@ -1,0 +1,109 @@
+{
+  "levelNumber": 315,
+  "difficulty": "HARD",
+  "title": "The Color Storm",
+  "description": "Difficulty: HARD | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 9043
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "VOID",
+      "OBSTACLE_BOX",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN"
+    ],
+    [
+      "VOID",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED"
+    ]
+  ],
+  "seed": 31625,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

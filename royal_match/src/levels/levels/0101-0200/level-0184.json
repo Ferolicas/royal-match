@@ -1,0 +1,121 @@
+{
+  "levelNumber": 184,
+  "difficulty": "NORMAL",
+  "title": "Treasure Hunt — Forest Realm",
+  "description": "Difficulty: NORMAL | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 5
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect keys",
+      "target": 6,
+      "itemId": "key"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 5,
+      "itemId": "coin"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "OBSTACLE_BOX",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "VOID",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED"
+    ]
+  ],
+  "seed": 31494,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

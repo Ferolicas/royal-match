@@ -1,0 +1,120 @@
+{
+  "levelNumber": 729,
+  "difficulty": "HARD",
+  "title": "Mountain Peak — Castle Realm",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect gems",
+      "target": 10,
+      "itemId": "gem"
+    },
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 14045
+    },
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 10
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "OBSTACLE_ICE",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "OBSTACLE_CAGE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "GEM_GREEN",
+      "OBSTACLE_ICE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 32039,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "levelNumber": 576,
+  "difficulty": "SUPER_HARD",
+  "title": "Last Stand — Mountain Realm",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 8,
+      "itemId": "coin"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 64,
+      "color": "RED"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "OBSTACLE_STONE",
+      "OBSTACLE_ICE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "OBSTACLE_ICE",
+      "GEM_PURPLE"
+    ],
+    [
+      "OBSTACLE_STONE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN"
+    ]
+  ],
+  "seed": 31886,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

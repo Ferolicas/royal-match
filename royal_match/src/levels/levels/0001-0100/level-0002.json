@@ -1,0 +1,110 @@
+{
+  "levelNumber": 2,
+  "difficulty": "EASY",
+  "title": "First Steps — Tutorial Island",
+  "description": "Difficulty: EASY | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 18,
+  "scoreStar1": 1008,
+  "scoreStar2": 1512,
+  "scoreStar3": 2218,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect gems",
+      "target": 5,
+      "itemId": "gem"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 31312,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 5,
+    "stars": 1
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "levelNumber": 80,
+  "difficulty": "NORMAL",
+  "title": "Treasure Hunt — Tutorial Island",
+  "description": "Difficulty: NORMAL | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 26,
+      "color": "RED"
+    },
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 3
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 23,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 31390,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

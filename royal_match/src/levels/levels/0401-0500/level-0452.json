@@ -1,0 +1,115 @@
+{
+  "levelNumber": 452,
+  "difficulty": "NORMAL",
+  "title": "A Treasure Hunt",
+  "description": "Difficulty: NORMAL | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 10
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect GREEN gems",
+      "target": 31,
+      "color": "GREEN"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "VOID"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "VOID",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 31762,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

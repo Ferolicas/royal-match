@@ -1,0 +1,121 @@
+{
+  "levelNumber": 60,
+  "difficulty": "SUPER_HARD",
+  "title": "A Last Stand",
+  "description": "Difficulty: SUPER_HARD | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 23470
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 64,
+      "color": "RED"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 48,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "OBSTACLE_STONE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "GEM_RED"
+    ],
+    [
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_STONE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_PURPLE",
+      "OBSTACLE_STONE",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "OBSTACLE_ICE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "VOID"
+    ]
+  ],
+  "seed": 31370,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

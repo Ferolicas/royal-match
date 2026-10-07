@@ -1,0 +1,110 @@
+{
+  "levelNumber": 408,
+  "difficulty": "SUPER_HARD",
+  "title": "Last Stand — Mountain Realm",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 64,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "OBSTACLE_ICE",
+      "GEM_BLUE",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_PURPLE",
+      "OBSTACLE_ICE"
+    ],
+    [
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 31718,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

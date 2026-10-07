@@ -1,0 +1,122 @@
+{
+  "levelNumber": 558,
+  "difficulty": "SUPER_HARD",
+  "title": "Hidden Final Push",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect gems",
+      "target": 6,
+      "itemId": "gem"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect PURPLE gems",
+      "target": 50,
+      "color": "PURPLE"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect keys",
+      "target": 8,
+      "itemId": "key"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_ICE",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "OBSTACLE_STONE",
+      "GEM_YELLOW",
+      "OBSTACLE_STONE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 31868,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

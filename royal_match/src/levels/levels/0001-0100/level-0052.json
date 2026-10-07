@@ -1,0 +1,109 @@
+{
+  "levelNumber": 52,
+  "difficulty": "NORMAL",
+  "title": "A Treasure Hunt",
+  "description": "Difficulty: NORMAL | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 3
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_RED"
+    ],
+    [
+      "VOID",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_BOX",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_RED",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "VOID",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ]
+  ],
+  "seed": 31362,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

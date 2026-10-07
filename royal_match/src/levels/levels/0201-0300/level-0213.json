@@ -1,0 +1,116 @@
+{
+  "levelNumber": 213,
+  "difficulty": "HARD",
+  "title": "Mystic Mountain Peak",
+  "description": "Difficulty: HARD | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect CYAN gems",
+      "target": 35,
+      "color": "CYAN"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 11,
+      "itemId": "coin"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 31523,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

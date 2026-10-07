@@ -1,0 +1,109 @@
+{
+  "levelNumber": 915,
+  "difficulty": "HARD",
+  "title": "The Color Storm",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 18820
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "VOID",
+      "GEM_CYAN"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 32225,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

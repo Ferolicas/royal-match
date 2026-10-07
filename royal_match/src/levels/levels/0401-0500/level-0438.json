@@ -1,0 +1,109 @@
+{
+  "levelNumber": 438,
+  "difficulty": "SUPER_HARD",
+  "title": "Hidden Final Push",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 24036
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE"
+    ],
+    [
+      "OBSTACLE_STONE",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_BLUE",
+      "OBSTACLE_STONE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_RED",
+      "OBSTACLE_BOX",
+      "GEM_BLUE",
+      "VOID",
+      "OBSTACLE_STONE",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "OBSTACLE_STONE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "VOID",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ]
+  ],
+  "seed": 31748,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "levelNumber": 939,
+  "difficulty": "HARD",
+  "title": "The Color Storm",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 8,
+      "itemId": "coin"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 25,
+      "color": "RED"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "VOID",
+      "GEM_RED",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "VOID",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 32249,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

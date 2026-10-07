@@ -1,0 +1,121 @@
+{
+  "levelNumber": 754,
+  "difficulty": "NORMAL",
+  "title": "Gem Cascade — Castle Realm",
+  "description": "Difficulty: NORMAL | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 10378
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 28,
+      "color": "RED"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect PURPLE gems",
+      "target": 35,
+      "color": "PURPLE"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "VOID",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 32064,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

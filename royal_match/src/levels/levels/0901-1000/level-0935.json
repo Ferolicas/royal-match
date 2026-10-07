@@ -1,0 +1,109 @@
+{
+  "levelNumber": 935,
+  "difficulty": "NORMAL",
+  "title": "Ancient Blocked Path",
+  "description": "Difficulty: NORMAL | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 3
+    }
+  ],
+  "boardLayout": [
+    [
+      "VOID",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE"
+    ]
+  ],
+  "seed": 32245,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

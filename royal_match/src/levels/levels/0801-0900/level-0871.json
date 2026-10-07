@@ -1,0 +1,121 @@
+{
+  "levelNumber": 871,
+  "difficulty": "NORMAL",
+  "title": "Ancient Blocked Path",
+  "description": "Difficulty: NORMAL | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 7
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect CYAN gems",
+      "target": 24,
+      "color": "CYAN"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 16,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "VOID"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "VOID"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 32181,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

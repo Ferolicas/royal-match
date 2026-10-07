@@ -1,0 +1,116 @@
+{
+  "levelNumber": 149,
+  "difficulty": "NORMAL",
+  "title": "Mystic Clearing Skies",
+  "description": "Difficulty: NORMAL | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect BLUE gems",
+      "target": 21,
+      "color": "BLUE"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 6,
+      "itemId": "coin"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "VOID"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 31459,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "levelNumber": 1,
+  "difficulty": "EASY",
+  "title": "Fresh Start — Tutorial Island",
+  "description": "Difficulty: EASY | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 18,
+  "scoreStar1": 1008,
+  "scoreStar2": 1512,
+  "scoreStar3": 2218,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect keys",
+      "target": 2,
+      "itemId": "key"
+    },
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 5
+    },
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 8985
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 31311,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 5,
+    "stars": 1
+  }
+}

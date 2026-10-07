@@ -1,0 +1,122 @@
+{
+  "levelNumber": 165,
+  "difficulty": "HARD",
+  "title": "Mystic Mountain Peak",
+  "description": "Difficulty: HARD | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect CYAN gems",
+      "target": 31,
+      "color": "CYAN"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect keys",
+      "target": 6,
+      "itemId": "key"
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 6,
+      "itemId": "coin"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "OBSTACLE_ICE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_RED",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_RED",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 31475,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

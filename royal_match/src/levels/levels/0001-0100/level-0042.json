@@ -1,0 +1,121 @@
+{
+  "levelNumber": 42,
+  "difficulty": "SUPER_HARD",
+  "title": "Final Push — Tutorial Island",
+  "description": "Difficulty: SUPER_HARD | Realm: Tutorial Island",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 70,
+      "color": "RED"
+    },
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 11128
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect RED gems",
+      "target": 70,
+      "color": "RED"
+    }
+  ],
+  "boardLayout": [
+    [
+      "VOID",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "OBSTACLE_STONE",
+      "GEM_CYAN",
+      "OBSTACLE_STONE",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "OBSTACLE_STONE",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "OBSTACLE_STONE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "OBSTACLE_STONE",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 31352,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "levelNumber": 829,
+  "difficulty": "NORMAL",
+  "title": "Mystic Clearing Skies",
+  "description": "Difficulty: NORMAL | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect keys",
+      "target": 3,
+      "itemId": "key"
+    },
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 12110
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect gems",
+      "target": 4,
+      "itemId": "gem"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "VOID",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "VOID",
+      "GEM_CYAN",
+      "GEM_RED",
+      "VOID",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ]
+  ],
+  "seed": 32139,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

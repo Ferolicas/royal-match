@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =============================================================================
+     ROYAL MATCH CLONE — PROJECT CONTEXT
+     =============================================================================
+     This XML is the single living context file for the entire project.
+     It captures WHAT is being built, the ARCHITECTURE, data schemas, game
+     rules, and PROGRESS status so any model can pick up and continue work
+     without ambiguity.
+
+     To update context after changes, edit this file and commit with a message
+     prefixed "CONTEXT:".
+
+     ========================================================================== -->
+<context>
+  <!-- ============================ PROJECT OVERVIEW =========================== -->
+  <project>
+    <name>Royal Match Clone</name>
+    <folder>royal_match</folder>
+    <description>A mobile-first match-3 puzzle game built with the PlayCanvas
+      engine (WebGL) for rendering and React for UI. Mirrors the style and
+      core gameplay loop of the mobile hit Royal Match. Features 1000 levels
+      with escalating difficulty: every 3rd level is Hard, every 6th is
+      Super Hard.</description>
+    <style>
+      <genre>Match-3 Puzzle</genre>
+      <inspiredBy>Royal Match (Dream Games)</inspiredBy>
+      <aesthetic>Bright, cartoonish, clean mobile-first design with smooth
+        animations, particle VFX, and a colorful gem aesthetic.</aesthetic>
+      <platform>Web (browser) targeting mobile-responsive</platform>
+      <engine>PlayCanvas engine (npm: playcanvas) for WebGL rendering</engine>
+      <ui>React 18 + TypeScript + Zustand for state</ui>
+    </style>
+    <status>active-development</status>
+  </project>
+
+  <!-- ============================ TECH STACK =============================== -->
+  <techStack>
+    <language>TypeScript</language>
+    <gameEngine>PlayCanvas (>=2.0, npm package "playcanvas")</gameEngine>
+    <uiFramework>React 18</uiFramework>
+    <buildTool>Vite 5</buildTool>
+    <stateManagement>Zustand</stateManagement>
+    <router>React Router v6</router>
+    <styling>CSS Modules + CSS Variables</styling>
+    <validation>Zod</validation>
+    <testing>Vitest + React Testing Library (jsdom)</testing>
+    <deployment>VPS (via holding-infra)</deployment>
+  </techStack>
+
+  <!-- ============================ ARCHITECTURE ============================= -->
+  <architecture>
+    <!--
+      The project separates CONCERN into three layers:
+
+      1. RENDERING  (src/engine/)   — PlayCanvas engine wrapper & 3D/WebGL scene.
+      2. GAME LOGIC (src/game/)      — Pure, framework-agnostic match-3 rules.
+      3. PRESENTATION (src/ui/)      — React components, React state, routing.
+
+      The game logic layer is deliberately decoupled from any rendering engine
+      so that the core algorithms can be unit-tested without a WebGL context.
+      The engine layer reads the pure logic state and projects it visually.
+    -->
+    <layers>
+      <layer name="engine" path="src/engine/"
+        purpose="PlayCanvas PC.Application lifecycle, scene setup, entity
+          management, camera, lighting, VFX. Pure bridge between logic state
+          and WebGL rendering."/>
+      <layer name="game" path="src/game/"
+        purpose="Framework-agnostic match-3 core: board, grid, pieces, match
+          finding, drop simulation, scoring, goals, input, state machine.
+          No React or PlayCanvas imports here."/>
+      <layer name="ui" path="src/ui/"
+        purpose="React components: screens, HUD, menus, level select, modals.
+          Uses hooks to subscribe to game state."/>
+      <layer name="data" path="src/data/"
+        purpose="Static game data: piece types, colors, goals, boosts, board
+          configs, level metadata."/>
+      <layer name="levels" path="src/levels/"
+        purpose="Level data: generator, difficulty rules, and 1000 generated
+          level JSON files split into folders of 100."/>
+      <layer name="utils" path="src/utils/"
+        purpose="Shared utilities, math helpers, RNG (deterministic),
+          debounce, deep clone, etc."/>
+      <layer name="types" path="src/types/"
+        purpose="Shared TypeScript interfaces and enums."/>
+    </layers>
+
+    <!-- Data Flow -->
+    <dataFlow>
+      1. LevelGenerator produces a LevelData JSON (deterministic seed).
+      2. LevelLoader reads JSON into the GameState.
+      3. Board logic processes swaps/matches/drops.
+      4. Engine renders the Board state as PlayCanvas entities.
+      5. UI subscribes to GameState (Zustand) and re-renders HUD.
+      6. Input (mouse/touch) flows: React input capture -> GameManager -> Board.
+    </dataFlow>
+  </architecture>
+
+  <!-- ============================ GAME RULES =============================== -->
+  <gameRules>
+    <!-- The match-3 rules mirror Royal Match mechanics -->
+    <board>
+      <rows>8</rows>
+      <cols>8</cols>
+      <gemTypes>6</gemTypes>
+      <!-- Gem colors/types: RED, BLUE, GREEN, YELLOW, PURPLE, CYAN -->
+      <minMatch>3</minMatch>
+      <matchScore>60</matchScore>
+      <!-- Each consecutive match in a cascade: 60*1 + 60*2 + 60*3 ... -->
+      <cascadeMultiplier>true</cascadeMultiplier>
+    </board>
+
+    <swapping>
+      <adjacentOnly>true</adjacentOnly>
+      <validIfCreatesMatch>true</validIfCreatesMatch>
+      <!-- Swapping only allowed if it forms at least one match of 3+ -->
+    </swapping>
+
+    <gravity>
+      <dropsFromAbove>true</dropsFromAbove>
+      <cascadeAfterMatches>true</cascadeAfterMatches>
+    </gravity>
+
+    <specialPieces>
+      <!-- Created when matching 4+ or L/T shapes -->
+      <type name="LineClear" matchSize="4" effect="Clears a row/column"/>
+      <type name="Bomb" matchSize="5" shape="T" effect="Clears 3x3 area"/>
+      <type name="ColorBomb" matchSize="5" shape="L" effect="Clears all of one color"/>
+      <type name="Rocket" matchSize="6" shape="line" effect="Clears entire row or column"/>
+    </specialPieces>
+  </gameRules>
+
+  <!-- ============================ LEVEL SYSTEM ============================= -->
+  <levelSystem>
+    <!--
+      1000 levels total. Difficulty is determined PURELY by level number:
+
+        Level 1-2   : EASY   (tutorial levels)
+        Level % 6 == 0 : SUPER_HARD
+        Level % 3 == 0 : HARD
+        Otherwise      : NORMAL
+    -->
+    <totalLevels>1000</totalLevels>
+    <difficultyRules>
+      <rule name="EASY">levels 1 and 2 (tutorial)</rule>
+      <rule name="SUPER_HARD">level % 6 == 0 (every 6th level)</rule>
+      <rule name="HARD">level % 3 == 0 but not % 6 (every 3rd, not 6th)</rule>
+      <rule name="NORMAL">all other levels</rule>
+    </difficultyRules>
+
+    <difficultyAttributes>
+      <!-- Difficulty affects: move budget, goal targets, obstacle density -->
+      <EASY    moves="+3" targets="x0.7" obstacles="none"/>
+      <NORMAL  moves="base" targets="base" obstacles="light"/>
+      <HARD    moves="-2" targets="x1.4" obstacles="moderate"/>
+      <SUPER_HARD moves="-4" targets="x2.0" obstacles="heavy"/>
+    </difficultyAttributes>
+
+    <levelFormat>
+      Each level is a JSON file: src/levels/levels/{range}/level-{NNNN}.json
+      Schema (validated by Zod schema in src/levels/schema.ts):
+    </levelFormat>
+
+    <levelSchema>
+      levelNumber      (integer 1-1000)
+      difficulty       (enum: EASY | NORMAL | HARD | SUPER_HARD)
+      title            (string)
+      description      (string)
+      grid             { cols, rows }
+      moveLimit        (integer)
+      scoreStar1       (integer, 1-star threshold)
+      scoreStar2       (integer, 2-star threshold)
+      scoreStar3       (integer, 3-star threshold)
+      objectives       (array of objective objects)
+      boardLayout      (2D array of cell definitions: EMPTY | BLOCKED |
+                          OBSTACLE_{type} | GEM_{color})
+      preplacedSpecials (array, optional special pieces at start)
+      rewards          { coins, stars, unlocks }
+    </levelSchema>
+
+    <objectiveTypes>
+      <type id="collect_color"  target="integer"
+        desc="Collect N gems of a specific color"/>
+      <type id="reach_score"    target="integer"
+        desc="Achieve at least N points"/>
+      <type id="remove_blocker" target="integer"
+        desc="Destroy N blocker obstacles"/>
+      <type id="collect_item"   target="integer"
+        desc="Collect N specific items (keys, coins, etc.)"/>
+      <type id="drop_down"      target="integer"
+        desc="Drop N objects to the bottom row"/>
+    </objectiveTypes>
+
+    <!-- Storage: levels are static JSON generated at build time. -->
+    <!-- Progressive loading: only load current + neighbors for memory. -->
+  </levelSystem>
+
+  <!-- ============================ PROGRESS STATUS ========================== -->
+  <progress>
+    <!-- Update [x] -> [x] as work completes, commit as "CONTEXT: update progress" -->
+    <milestone name="Project scaffold &amp; config" status="done"/>
+    <milestone name="XML context + project map + CLAUDE.md" status="in-progress"/>
+    <milestone name="PlayCanvas engine integration layer" status="todo"/>
+    <milestone name="Match-3 core logic (Board, Grid, Piece, MatchFinder)" status="todo"/>
+    <milestone name="Drop system &amp; gravity simulation" status="todo"/>
+    <milestone name="Game state machine &amp; input handler" status="todo"/>
+    <milestone name="Level generator (1000 levels)" status="todo"/>
+    <milestone name="Level JSON data files" status="todo"/>
+    <milestone name="Special pieces &amp; abilities" status="todo"/>
+    <milestone name="Scoring &amp; star thresholds" status="todo"/>
+    <milestone name="React UI: splash, main menu, level select" status="todo"/>
+    <milestone name="React UI: in-game HUD" status="todo"/>
+    <milestone name="Unit tests" status="todo"/>
+    <milestone name="Build &amp; typecheck passing" status="todo"/>
+  </progress>
+
+  <!-- ============================ NOTES FOR NEXT MODEL ==================== -->
+  <notes>
+    <note>This project uses deterministic RNG (seedrandom-style) so any level
+      is reproducible. DO NOT use Math.random() in the level generator or board
+      logic; use src/utils/rng.ts (deterministic).</note>
+    <note>PlayCanvas engine init happens once in src/engine/PlayCanvasApp.ts.
+      The game creates entities for each gem and pools them. NEVER create
+      entities in a hot loop without using the ObjectPool pattern.</note>
+    <note>All 1000 level files are generated by running "pnpm generate:levels"
+      which executes scripts/generate-levels.ts. The script is deterministic.</note>
+    <note>UI screens: SPLASH -> MAIN_MENU -> LEVEL_SELECT -> GAME -> LEVEL_COMPLETE -> REWARDS</note>
+  </notes>
+</context>

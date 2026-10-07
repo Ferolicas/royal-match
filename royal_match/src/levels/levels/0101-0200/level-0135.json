@@ -1,0 +1,114 @@
+{
+  "levelNumber": 135,
+  "difficulty": "HARD",
+  "title": "Ancient Color Storm",
+  "description": "Difficulty: HARD | Realm: Forest Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 8
+    },
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 11
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "OBSTACLE_ICE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "VOID",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_RED",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "OBSTACLE_ICE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 31445,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

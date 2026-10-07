@@ -1,0 +1,110 @@
+{
+  "levelNumber": 649,
+  "difficulty": "NORMAL",
+  "title": "Clearing Skies — Mountain Realm",
+  "description": "Difficulty: NORMAL | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect GREEN gems",
+      "target": 23,
+      "color": "GREEN"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "VOID"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_RED"
+    ]
+  ],
+  "seed": 31959,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "levelNumber": 843,
+  "difficulty": "HARD",
+  "title": "The Color Storm",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 13885
+    },
+    {
+      "type": "collect_item",
+      "description": "Collect coins",
+      "target": 6,
+      "itemId": "coin"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 29,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ]
+  ],
+  "seed": 32153,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

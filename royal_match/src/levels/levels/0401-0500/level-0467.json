@@ -1,0 +1,109 @@
+{
+  "levelNumber": 467,
+  "difficulty": "NORMAL",
+  "title": "The Blocked Path",
+  "description": "Difficulty: NORMAL | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 15,
+  "scoreStar1": 1200,
+  "scoreStar2": 1800,
+  "scoreStar3": 2640,
+  "objectives": [
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 13110
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED"
+    ],
+    [
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 31777,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  }
+}

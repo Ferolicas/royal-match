@@ -1,0 +1,109 @@
+{
+  "levelNumber": 909,
+  "difficulty": "HARD",
+  "title": "Mystic Mountain Peak",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 13,
+  "scoreStar1": 1352,
+  "scoreStar2": 2028,
+  "scoreStar3": 2974,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Remove obstacles",
+      "target": 8
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "VOID",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "OBSTACLE_BOX",
+      "VOID",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "OBSTACLE_BOX",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_GREEN"
+    ]
+  ],
+  "seed": 32219,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "levelNumber": 486,
+  "difficulty": "SUPER_HARD",
+  "title": "Hidden Final Push",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_item",
+      "description": "Collect gems",
+      "target": 10,
+      "itemId": "gem"
+    },
+    {
+      "type": "collect_color",
+      "description": "Collect YELLOW gems",
+      "target": 62,
+      "color": "YELLOW"
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "OBSTACLE_STONE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "VOID",
+      "GEM_GREEN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_BLUE",
+      "OBSTACLE_ICE",
+      "OBSTACLE_BOX",
+      "OBSTACLE_CAGE",
+      "GEM_CYAN",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ],
+    [
+      "OBSTACLE_BOX",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "VOID",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "VOID",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "VOID"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ]
+  ],
+  "seed": 31796,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}

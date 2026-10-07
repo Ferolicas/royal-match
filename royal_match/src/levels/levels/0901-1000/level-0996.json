@@ -1,0 +1,115 @@
+{
+  "levelNumber": 996,
+  "difficulty": "SUPER_HARD",
+  "title": "A Last Stand",
+  "description": "Difficulty: SUPER_HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 8,
+    "rows": 8
+  },
+  "moveLimit": 11,
+  "scoreStar1": 1584,
+  "scoreStar2": 2376,
+  "scoreStar3": 3485,
+  "objectives": [
+    {
+      "type": "collect_color",
+      "description": "Collect GREEN gems",
+      "target": 54,
+      "color": "GREEN"
+    },
+    {
+      "type": "reach_score",
+      "description": "Reach the target score",
+      "target": 27218
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "OBSTACLE_ICE",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_GREEN"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_YELLOW",
+      "OBSTACLE_ICE",
+      "OBSTACLE_STONE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "VOID",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "VOID",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ]
+  ],
+  "seed": 32306,
+  "version": "1.0.0",
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  }
+}
