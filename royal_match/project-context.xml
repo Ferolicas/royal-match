@@ -200,7 +200,7 @@
     <!-- Update [x] -> [x] as work completes, commit as "CONTEXT: update progress" -->
     <milestone name="Project scaffold &amp; config" status="done"/>
     <milestone name="XML context + project map + CLAUDE.md" status="done"/>
-    <milestone name="PlayCanvas engine integration layer" status="in-progress"/>
+    <milestone name="PlayCanvas engine integration layer" status="done"/>
     <milestone name="Match-3 core logic (Board, Grid, Piece, MatchFinder)" status="done"/>
     <milestone name="Drop system &amp; gravity simulation" status="done"/>
     <milestone name="Game state machine &amp; input handler" status="done"/>
@@ -208,9 +208,9 @@
     <milestone name="Level JSON data files" status="done"/>
     <milestone name="Special pieces &amp; abilities" status="done"/>
     <milestone name="Scoring &amp; star thresholds" status="done"/>
-    <milestone name="React UI: splash, main menu, level select" status="todo"/>
-    <milestone name="React UI: in-game HUD" status="todo"/>
-    <milestone name="Unit tests" status="todo"/>
+    <milestone name="React UI: splash, main menu, level select" status="done"/>
+    <milestone name="React UI: in-game HUD" status="done"/>
+    <milestone name="Unit tests" status="done"/>
     <milestone name="Build &amp; typecheck passing" status="done"/>
   </progress>
 
