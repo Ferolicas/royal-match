@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
@@ -24,10 +24,9 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             playcanvas: ["playcanvas"],
-            react: ["react", "react-dom"],
+            vendor: ["react", "react-dom"],
             router: ["react-router-dom"],
             state: ["zustand"],
-            ui: ["react", "react-dom"],
           },
         },
       },

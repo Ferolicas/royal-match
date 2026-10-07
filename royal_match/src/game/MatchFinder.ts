@@ -31,105 +31,79 @@ export class MatchFinder {
     if (rows === 0) return matches;
     const cols = board[0].length;
 
-    const visited = new Set<string>();
-
+    // Find horizontal matches — scan each row, skip past maximal runs
     for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
+      let c = 0;
+      while (c < cols) {
         const cell = board[r][c];
-        if (!isGemCell(cell)) continue;
+        if (!isGemCell(cell)) {
+          c++;
+          continue;
+        }
 
         const color = getGemColor(cell)!;
-
-        // Check horizontal
-        const hMatches = MatchFinder.findDirection(board, r, c, 'horizontal');
-        for (const m of hMatches) {
-          const key = `${m.start.row},${m.start.col},${m.direction}`;
-          if (!visited.has(key)) {
-            matches.push(m);
-            visited.add(key);
+        let end = 0;
+        for (let i = 1; i < cols - c; i++) {
+          if (getGemColor(board[r][c + i]) === color) {
+            end = i;
+          } else {
+            break;
           }
         }
 
-        // Check vertical
-        const vMatches = MatchFinder.findDirection(board, r, c, 'vertical');
-        for (const m of vMatches) {
-          const key = `${m.start.row},${m.start.col},${m.direction}`;
-          if (!visited.has(key)) {
-            matches.push(m);
-            visited.add(key);
-          }
+        const length = end + 1;
+        if (length >= MIN_MATCH) {
+          matches.push({
+            start: { row: r, col: c },
+            end: { row: r, col: c + end },
+            length,
+            direction: 'horizontal',
+            color,
+          });
+          c = c + end + 1; // Skip past the entire match
+        } else {
+          c++;
         }
       }
     }
 
-    // Deduplicate overlapping matches (same cells, different entry point)
-    return MatchFinder.deduplicate(matches);
-  }
+    // Find vertical matches — scan each column, skip past maximal runs
+    for (let c = 0; c < cols; c++) {
+      let r = 0;
+      while (r < rows) {
+        const cell = board[r][c];
+        if (!isGemCell(cell)) {
+          r++;
+          continue;
+        }
 
-  private static findDirection(
-    board: string[][],
-    row: number,
-    col: number,
-    direction: MatchDirection
-  ): Match[] {
-    const matches: Match[] = [];
-    const color = getGemColor(board[row][col]);
-    if (!color) return matches;
+        const color = getGemColor(cell)!;
+        let end = 0;
+        for (let i = 1; i < rows - r; i++) {
+          if (getGemColor(board[r + i][c]) === color) {
+            end = i;
+          } else {
+            break;
+          }
+        }
 
-    const rows = board.length;
-    const cols = board[0].length;
-    const dr = direction === 'vertical' ? 1 : 0;
-    const dc = direction === 'horizontal' ? 1 : 0;
-
-    let end = 0;
-    for (let i = 1; i <= Math.max(rows, cols); i++) {
-      const nr = row + dr * i;
-      const nc = col + dc * i;
-      if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) break;
-      if (getGemColor(board[nr][nc]) === color) {
-        end = i;
-      } else {
-        break;
+        const length = end + 1;
+        if (length >= MIN_MATCH) {
+          matches.push({
+            start: { row: r, col: c },
+            end: { row: r + end, col: c },
+            length,
+            direction: 'vertical',
+            color,
+          });
+          r = r + end + 1; // Skip past the entire match
+        } else {
+          r++;
+        }
       }
-    }
-
-    const length = end + 1;
-    if (length >= MIN_MATCH) {
-      matches.push({
-        start: { row, col },
-        end: { row: row + dr * end, col: col + dc * end },
-        length,
-        direction,
-        color,
-      });
     }
 
     return matches;
-  }
-
-  private static deduplicate(matches: Match[]): Match[] {
-    const result: Match[] = [];
-    const seen = new Set<string>();
-
-    for (const m of matches) {
-      const cells: string[] = [];
-      if (m.direction === 'horizontal') {
-        for (let c = m.start.col; c <= m.end.col; c++) {
-          cells.push(`${m.start.row},${c}`);
-        }
-      } else {
-        for (let r = m.start.row; r <= m.end.row; r++) {
-          cells.push(`${r},${m.start.col}`);
-        }
-      }
-      const key = cells.join('|');
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(m);
-      }
-    }
-
-    return result;
   }
 
   static findMatchesWithSpecials(board: string[][]): MatchResult {
@@ -156,14 +130,12 @@ export class MatchFinder {
       return 'line';
     }
     if (match.length === 5) {
-      // Check for T or L shape by examining the pattern
-      const fullLength = Math.abs(match.end.row - match.start.row) +
-                          Math.abs(match.end.col - match.start.col) + 1;
-      if (fullLength === match.length) {
-        return match.length === 5 ? 'T' : 'L';
-      }
+      // All matches found by MatchFinder are straight lines.
+      // T/L shape detection would require pattern matching on L/T intersections,
+      // which is a future enhancement. For now, treat all 5-matches as 'L'.
+      return 'L';
     }
-    return match.direction === 'horizontal' ? 'line' : 'line';
+    return 'line';
   }
 
   static hasAnyMatch(board: string[][]): boolean {

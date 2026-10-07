@@ -19,6 +19,22 @@ export const CellSchema = z.enum([
 
 export type CellValue = z.infer<typeof CellSchema>;
 
+export const CELL_VALUES: CellValue[] = [
+  'EMPTY',
+  'GEM_RED',
+  'GEM_BLUE',
+  'GEM_GREEN',
+  'GEM_YELLOW',
+  'GEM_PURPLE',
+  'GEM_CYAN',
+  'BLOCKED',
+  'OBSTACLE_BOX',
+  'OBSTACLE_CAGE',
+  'OBSTACLE_ICE',
+  'OBSTACLE_STONE',
+  'VOID',
+];
+
 export const ObjectiveSchema = z.object({
   type: z.enum([
     'collect_color',
