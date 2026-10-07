@@ -1,4 +1,4 @@
-import type { ObjectiveData, RuntimeObjective } from '../levels/LevelData';
+import type { RuntimeObjective } from '../levels/LevelData';
 import type { Match } from '../types/GameState';
 
 export type CheckResult = {

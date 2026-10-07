@@ -19,24 +19,28 @@ interface ObstacleSpec {
   density: number;
   types: CellValue[];
   blockerCount: number;
+  voidCount: number;
 }
 
 const OBSTACLE_SPECS: Record<Difficulty, ObstacleSpec> = {
-  [Difficulty.EASY]: { density: 0, types: ['BLOCKED'], blockerCount: 0 },
+  [Difficulty.EASY]: { density: 0, types: ['BLOCKED'], blockerCount: 0, voidCount: 0 },
   [Difficulty.NORMAL]: {
     density: 0.08,
     types: ['OBSTACLE_BOX', 'OBSTACLE_CAGE'],
     blockerCount: 2,
+    voidCount: 1,
   },
   [Difficulty.HARD]: {
     density: 0.18,
     types: ['OBSTACLE_BOX', 'OBSTACLE_CAGE', 'OBSTACLE_ICE'],
     blockerCount: 5,
+    voidCount: 3,
   },
   [Difficulty.SUPER_HARD]: {
     density: 0.35,
     types: ['OBSTACLE_BOX', 'OBSTACLE_CAGE', 'OBSTACLE_ICE', 'OBSTACLE_STONE'],
     blockerCount: 8,
+    voidCount: 6,
   },
 };
 
@@ -70,72 +74,112 @@ function placeObstacles(
         continue;
       }
 
-      if (rng.next() < 0.03) {
-        board[r][c] = 'VOID' as CellValue;
-      }
     }
+  }
+
+  const emptyCells: { row: number; col: number }[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] === 'EMPTY') emptyCells.push({ row: r, col: c });
+    }
+  }
+  for (const { row, col } of rng.shuffle(emptyCells).slice(0, spec.voidCount)) {
+    board[row][col] = 'VOID';
   }
 
   return { obstacleCells, blockedCount };
 }
 
-function fillGems(board: CellValue[][], rng: DeterministicRNG, rows: number, cols: number): void {
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (board[r][c] === 'EMPTY') {
-        const color = rng.pickOne(GEM_TYPES)!;
-        board[r][c] = `GEM_${color}` as CellValue;
-      }
-    }
-  }
+function hasMatchAt(board: CellValue[][], row: number, col: number): boolean {
+  const value = board[row]?.[col];
+  if (!value?.startsWith('GEM_')) return false;
+
+  let horizontal = 1;
+  for (let c = col - 1; c >= 0 && board[row][c] === value; c--) horizontal++;
+  for (let c = col + 1; c < board[row].length && board[row][c] === value; c++) horizontal++;
+
+  let vertical = 1;
+  for (let r = row - 1; r >= 0 && board[r][col] === value; r--) vertical++;
+  for (let r = row + 1; r < board.length && board[r][col] === value; r++) vertical++;
+
+  return horizontal >= 3 || vertical >= 3;
 }
 
-function removeAdjacentSameColors(
-  board: CellValue[][],
-  rng: DeterministicRNG,
-  rows: number,
-  cols: number
-): void {
+function hasValidMove(board: CellValue[][]): boolean {
+  const directions = [[1, 0], [0, 1]] as const;
+  const rows = board.length;
+  const cols = board[0]?.length ?? 0;
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const cell = board[r][c];
-      if (!cell.startsWith('GEM_')) continue;
-
-      const color = cell.substring(4);
-      const hasAdjacentSame =
-        (r > 0 && board[r - 1][c] === cell) ||
-        (r < rows - 1 && board[r + 1][c] === cell) ||
-        (c > 0 && board[r][c - 1] === cell) ||
-        (c < cols - 1 && board[r][c + 1] === cell);
-
-      if (hasAdjacentSame) {
-        const colors = GEM_TYPES.filter((g) => g !== color);
-        const newColor = rng.pickOne(colors)!;
-        board[r][c] = `GEM_${newColor}` as CellValue;
+      if (!board[r][c].startsWith('GEM_')) continue;
+      for (const [dr, dc] of directions) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (!board[nr]?.[nc]?.startsWith('GEM_')) continue;
+        [board[r][c], board[nr][nc]] = [board[nr][nc], board[r][c]];
+        const createsMatch = hasMatchAt(board, r, c) || hasMatchAt(board, nr, nc);
+        [board[r][c], board[nr][nc]] = [board[nr][nc], board[r][c]];
+        if (createsMatch) return true;
       }
     }
   }
+  return false;
+}
+
+function fillGems(board: CellValue[][], rng: DeterministicRNG, rows: number, cols: number): void {
+  const gemCells: { row: number; col: number }[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] === 'EMPTY') gemCells.push({ row: r, col: c });
+    }
+  }
+
+  for (let attempt = 0; attempt < 100; attempt++) {
+    for (const { row, col } of gemCells) {
+      const candidates = rng.shuffle([...GEM_TYPES]);
+      const color = candidates.find((candidate) => {
+        const value = `GEM_${candidate}`;
+        return !(
+          (col >= 2 && board[row][col - 1] === value && board[row][col - 2] === value) ||
+          (row >= 2 && board[row - 1][col] === value && board[row - 2][col] === value)
+        );
+      }) ?? candidates[0];
+      board[row][col] = `GEM_${color}` as CellValue;
+    }
+    if (hasValidMove(board)) return;
+    for (const { row, col } of gemCells) board[row][col] = 'EMPTY';
+  }
+
+  throw new Error('Unable to generate a board with at least one valid move');
 }
 
 function getValidObjectives(
+  levelNumber: number,
   difficulty: Difficulty,
-  rng: DeterministicRNG
+  rng: DeterministicRNG,
+  obstacleCount: number,
+  moveLimit: number,
 ): ObjectiveData[] {
+  if (levelNumber === 1) {
+    return [{ type: ObjectiveType.REACH_SCORE, description: 'Reach the target score', target: 300 }];
+  }
+  if (levelNumber === 2) {
+    return [{ type: ObjectiveType.COLLECT_COLOR, description: 'Collect RED gems', target: 6, color: 'RED' }];
+  }
+
   const objectives: ObjectiveData[] = [];
-  const availableTypes: ObjectiveType[] = [
+  const availableTypes = rng.shuffle([
     ObjectiveType.COLLECT_COLOR,
     ObjectiveType.REACH_SCORE,
-    ObjectiveType.REMOVE_BLOCKER,
-    ObjectiveType.COLLECT_ITEM,
-  ];
+    ...(obstacleCount > 0 ? [ObjectiveType.REMOVE_BLOCKER] : []),
+  ]);
 
-  const count = rng.nextInRange(1, 3);
+  const desiredCount = difficulty === Difficulty.NORMAL ? 2 : 3;
+  const count = Math.min(desiredCount, availableTypes.length);
 
   for (let i = 0; i < count; i++) {
-    const type = rng.pickOne(availableTypes)!;
+    const type = availableTypes[i];
     const multiplier = DIFFICULTY_MULTIPLIERS[difficulty].goalTargetMultiplier;
-
-    let objective: ObjectiveData;
 
     switch (type) {
       case ObjectiveType.COLLECT_COLOR: {
@@ -143,7 +187,7 @@ function getValidObjectives(
         objectives.push({
           type,
           description: `Collect ${color} gems`,
-          target: Math.round(rng.nextInRange(15, 35) * multiplier),
+          target: Math.max(4, Math.round(rng.nextInRange(5, 9) * multiplier)),
           color,
         });
         break;
@@ -152,27 +196,16 @@ function getValidObjectives(
         objectives.push({
           type,
           description: 'Reach the target score',
-          target: Math.round(rng.nextInRange(5000, 15000) * multiplier),
+          target: Math.round(moveLimit * rng.nextInRange(35, 55) * multiplier),
         });
         break;
       case ObjectiveType.REMOVE_BLOCKER:
         objectives.push({
           type,
           description: 'Remove obstacles',
-          target: Math.round(rng.nextInRange(3, 12) * multiplier),
+          target: rng.nextInRange(1, obstacleCount),
         });
         break;
-      case ObjectiveType.COLLECT_ITEM: {
-        const items = ['key', 'coin', 'gem'];
-        const itemId = rng.pickOne(items)!;
-        objectives.push({
-          type,
-          description: `Collect ${itemId}s`,
-          target: Math.round(rng.nextInRange(3, 8) * multiplier),
-          itemId,
-        });
-        break;
-      }
     }
   }
 
@@ -219,11 +252,10 @@ export function generateLevel(levelNumber: number): LevelData {
 
   const board = createEmptyBoard(GRID_ROWS, GRID_COLS);
 
-  placeObstacles(board, rng, spec, GRID_ROWS, GRID_COLS);
+  const { obstacleCells } = placeObstacles(board, rng, spec, GRID_ROWS, GRID_COLS);
   fillGems(board, rng, GRID_ROWS, GRID_COLS);
-  removeAdjacentSameColors(board, rng, GRID_ROWS, GRID_COLS);
 
-  const objectives = getValidObjectives(difficulty, rng);
+  const objectives = getValidObjectives(levelNumber, difficulty, rng, obstacleCells, moveLimit);
 
   const stars = computeStarThresholds(moveLimit, objectives, difficulty);
 

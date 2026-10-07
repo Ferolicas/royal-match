@@ -35,20 +35,19 @@ export const CELL_VALUES: CellValue[] = [
   'VOID',
 ];
 
-export const ObjectiveSchema = z.object({
-  type: z.enum([
-    'collect_color',
-    'reach_score',
-    'remove_blocker',
-    'collect_item',
-    'drop_down',
-  ]),
+const ObjectiveBaseSchema = z.object({
   description: z.string(),
   target: z.number().int().positive(),
-  color: z.string().optional(),
-  itemId: z.string().optional(),
   current: z.number().int().optional(),
 });
+
+export const ObjectiveSchema = z.discriminatedUnion('type', [
+  ObjectiveBaseSchema.extend({ type: z.literal('collect_color'), color: z.enum(['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'CYAN']) }),
+  ObjectiveBaseSchema.extend({ type: z.literal('reach_score') }),
+  ObjectiveBaseSchema.extend({ type: z.literal('remove_blocker') }),
+  ObjectiveBaseSchema.extend({ type: z.literal('collect_item'), itemId: z.string().min(1) }),
+  ObjectiveBaseSchema.extend({ type: z.literal('drop_down'), itemId: z.string().min(1).optional() }),
+]);
 
 export type ObjectiveData = z.infer<typeof ObjectiveSchema>;
 
@@ -85,11 +84,24 @@ export const LevelDataSchema = z.object({
     .optional(),
   seed: z.number().int(),
   version: z.string(),
+}).superRefine((level, context) => {
+  if (level.boardLayout.length !== level.grid.rows) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ['boardLayout'], message: 'Board row count must match grid.rows' });
+  }
+  level.boardLayout.forEach((row, index) => {
+    if (row.length !== level.grid.cols) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ['boardLayout', index], message: 'Board column count must match grid.cols' });
+    }
+  });
+  if (!(level.scoreStar1 <= level.scoreStar2 && level.scoreStar2 <= level.scoreStar3)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ['scoreStar1'], message: 'Star thresholds must be monotonic' });
+  }
 });
 
 export type LevelData = z.infer<typeof LevelDataSchema>;
 
 /** Runtime objective with a mutable `current` progress tracker. */
-export type RuntimeObjective = Omit<ObjectiveData, 'current'> & { current: number };
+type WithCurrent<T> = T extends unknown ? Omit<T, 'current'> & { current: number } : never;
+export type RuntimeObjective = WithCurrent<ObjectiveData>;
 
 export const LEVEL_SCHEMA_VERSION = '1.0.0';

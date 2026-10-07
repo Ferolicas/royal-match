@@ -23,15 +23,15 @@ Each difficulty tier modifies these knobs from the **base values**:
 
 | Param | EASY | NORMAL | HARD | SUPER_HARD |
 |-------|------|--------|------|------------|
-| Move limit | +3 | base (5–8) | −2 | −4 |
+| Move limit | 18 | 15 | 13 | 11 |
 | Goal target multiplier | 0.7× | 1.0× | 1.4× | 2.0× |
 | Obstacle density on board | none | light (5–10%) | moderate (15–25%) | heavy (30–45%) |
-| Pre-placed blockers | none | 1–3 | 3–6 | 6–10 |
-| Board holes (void cells) | none | 0–2 | 2–4 | 4–8 |
+| Maximum obstacles | none | 2 | 5 | 8 |
+| Board holes (void cells) | none | 1 | 3 | 6 |
 
 ### Worked Example
 
-- **Level 9 (NORMAL):** 8×8 board, 15 moves, 3 objectives each at base targets.
+- **Level 9 (HARD):** 8×8 board, 13 moves and up to 5 obstacles.
 - **Level 12 (SUPER_HARD):** 8×8 board, 11 moves (15 − 4), 3 objectives at 2×
   targets, 35% obstacle density, 8 pre-placed blockers.
 - **Level 15 (HARD):** 8×8 board, 13 moves (15 − 2), objectives at 1.4× targets,
@@ -44,11 +44,12 @@ Each difficulty tier modifies these knobs from the **base values**:
 | `collect_color` | Collect Gems | Match gems of a specific color. |
 | `reach_score` | Score Target | Achieve at least N points. |
 | `remove_blocker` | Clear Blockers | Destroy obstacle cells (boxes, cages). |
-| `collect_item` | Collect Items | Collect keys, coins, or boost components. |
-| `drop_down` | Drop Object | Guide objects to fall to the bottom row. |
+| `collect_item` | Collect Items | Schema-reserved; not generated until item entities exist. |
+| `drop_down` | Drop Object | Schema-reserved; not generated until drop objects exist. |
 
-Most levels have **2–3 objectives** of mixed types. Objectives scale in
-target quantity by difficulty multiplier.
+Generated levels use only the three implemented objective types. Normal levels
+have two objectives; Hard and Super Hard levels have up to three. Targets scale
+by difficulty while blocker targets never exceed blockers present on the board.
 
 ## Star Thresholds (Scoring)
 
@@ -90,8 +91,9 @@ Steps:
 1. Compute difficulty from level number.
 2. Derive RNG seed.
 3. Set base params (grid 8×8, moveLimit, objectives count) from difficulty.
-4. Scatter obstacles via seeded random with density from difficulty.
+4. Scatter a bounded number of obstacles and void cells using seeded random.
 5. Pick objective types & targets (weighted, scaling by difficulty).
-6. Ensure the level is **solvable** (basic reachability check: no fully
-   walled-off blockers, at least one valid match exists).
+6. Reject initial matches and regenerate until at least one legal swap exists.
+   This is an opening-state guarantee, not a proof that every objective can be
+   completed under every sequence of moves.
 7. Write JSON with schema validation.

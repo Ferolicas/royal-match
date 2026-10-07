@@ -1,7 +1,4 @@
 import type { Match } from '../types/GameState';
-import { SpecialType } from '../types/SpecialType';
-import { CELL_MATCH_SCORES } from '../data/boardConfig';
-import type { GemColor } from '../data/colors';
 
 export interface ScoreResult {
   points: number;
@@ -15,8 +12,8 @@ export class Scoring {
     cascadeNumber: number,
     specialsInvolved: boolean
   ): number {
-    const baseScore = CELL_MATCH_SCORES.get(match.color as GemColor) ?? 60;
-    let points = baseScore * match.length * cascadeNumber;
+    const baseScore = match.length >= 6 ? 200 : match.length === 5 ? 180 : match.length === 4 ? 120 : 60;
+    let points = baseScore * cascadeNumber;
 
     if (specialsInvolved) {
       points = Math.round(points * 1.5);
@@ -30,7 +27,7 @@ export class Scoring {
     cascadeNumber: number
   ): { points: number; specialsInvolved: boolean } {
     let totalPoints = 0;
-    let specialsInvolved = false;
+    const specialsInvolved = false;
 
     for (const match of matches) {
       const score = Scoring.calculateMatchScore(match, cascadeNumber, false);

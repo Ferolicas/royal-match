@@ -15,100 +15,95 @@
     {
       "type": "reach_score",
       "description": "Reach the target score",
-      "target": 9967
-    },
-    {
-      "type": "remove_blocker",
-      "description": "Remove obstacles",
-      "target": 5
+      "target": 630
     },
     {
       "type": "collect_color",
-      "description": "Collect RED gems",
-      "target": 24,
-      "color": "RED"
+      "description": "Collect GREEN gems",
+      "target": 5,
+      "color": "GREEN"
     }
   ],
   "boardLayout": [
     [
-      "GEM_YELLOW",
-      "GEM_CYAN",
-      "GEM_CYAN",
-      "GEM_RED",
-      "GEM_YELLOW",
-      "OBSTACLE_BOX",
-      "GEM_RED",
-      "GEM_BLUE"
-    ],
-    [
-      "GEM_CYAN",
-      "OBSTACLE_CAGE",
-      "GEM_YELLOW",
-      "GEM_GREEN",
-      "GEM_YELLOW",
-      "GEM_CYAN",
-      "VOID",
-      "GEM_GREEN"
-    ],
-    [
-      "GEM_RED",
-      "GEM_YELLOW",
-      "GEM_RED",
-      "GEM_BLUE",
-      "GEM_GREEN",
-      "VOID",
-      "GEM_RED",
-      "GEM_PURPLE"
-    ],
-    [
-      "GEM_YELLOW",
-      "GEM_RED",
-      "GEM_RED",
-      "GEM_YELLOW",
-      "GEM_PURPLE",
-      "GEM_RED",
-      "GEM_BLUE",
-      "GEM_PURPLE"
-    ],
-    [
-      "GEM_RED",
-      "GEM_CYAN",
-      "GEM_BLUE",
-      "GEM_RED",
       "GEM_GREEN",
       "GEM_PURPLE",
       "GEM_GREEN",
-      "GEM_CYAN"
-    ],
-    [
-      "VOID",
-      "GEM_BLUE",
-      "GEM_PURPLE",
-      "GEM_CYAN",
-      "GEM_YELLOW",
-      "GEM_RED",
-      "GEM_BLUE",
-      "GEM_CYAN"
-    ],
-    [
-      "GEM_PURPLE",
-      "GEM_CYAN",
-      "GEM_YELLOW",
-      "GEM_BLUE",
-      "GEM_CYAN",
       "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
       "GEM_RED",
       "GEM_YELLOW"
     ],
     [
+      "GEM_RED",
       "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_CYAN",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
       "GEM_BLUE",
       "GEM_GREEN",
       "VOID",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
       "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
       "GEM_RED",
       "GEM_CYAN",
       "GEM_RED"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN"
     ]
   ],
   "seed": 32097,

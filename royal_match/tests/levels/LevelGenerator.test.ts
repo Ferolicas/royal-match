@@ -4,6 +4,30 @@ import { getDifficulty, computeMoveLimit, getSeed } from '../../src/levels/Diffi
 import { Difficulty } from '../../src/types/Difficulty';
 import { LevelDataSchema } from '../../src/levels/LevelData';
 import { DeterministicRNG } from '../../src/utils/rng';
+import { MatchFinder } from '../../src/game/MatchFinder';
+
+function hasValidSwap(board: string[][]): boolean {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (!board[row][col].startsWith('GEM_')) continue;
+      for (const [dr, dc] of [[1, 0], [0, 1]] as const) {
+        const nextRow = row + dr;
+        const nextCol = col + dc;
+        if (!board[nextRow]?.[nextCol]?.startsWith('GEM_')) continue;
+        [board[row][col], board[nextRow][nextCol]] = [board[nextRow][nextCol], board[row][col]];
+        const matches = MatchFinder.findMatches(board);
+        [board[row][col], board[nextRow][nextCol]] = [board[nextRow][nextCol], board[row][col]];
+        if (matches.some((match) =>
+          (match.direction === 'horizontal' && match.start.row === row && col >= match.start.col && col <= match.end.col) ||
+          (match.direction === 'vertical' && match.start.col === col && row >= match.start.row && row <= match.end.row) ||
+          (match.direction === 'horizontal' && match.start.row === nextRow && nextCol >= match.start.col && nextCol <= match.end.col) ||
+          (match.direction === 'vertical' && match.start.col === nextCol && nextRow >= match.start.row && nextRow <= match.end.row)
+        )) return true;
+      }
+    }
+  }
+  return false;
+}
 
 describe('LevelGenerator', () => {
   describe('getDifficulty', () => {
@@ -134,6 +158,30 @@ describe('LevelGenerator', () => {
       expect(level.rewards).toBeDefined();
       expect(level.rewards!.coins).toBeGreaterThanOrEqual(0);
       expect(level.rewards!.stars).toBeGreaterThanOrEqual(1);
+    });
+
+    it('generates all 1000 levels without initial matches or dead boards', () => {
+      for (let levelNumber = 1; levelNumber <= 1000; levelNumber++) {
+        const level = generateLevel(levelNumber);
+        const serialized = level.boardLayout.map((row) => [...row]);
+        const blockers = serialized.flat().filter((cell) => cell.startsWith('OBSTACLE_')).length;
+
+        expect(MatchFinder.findMatches(serialized), `level ${levelNumber} initial matches`).toHaveLength(0);
+        expect(hasValidSwap(serialized), `level ${levelNumber} has no valid swap`).toBe(true);
+        expect(new Set(level.objectives.map((objective) => {
+          const discriminator = objective.type === 'collect_color'
+            ? objective.color
+            : objective.type === 'collect_item' || objective.type === 'drop_down'
+              ? objective.itemId ?? ''
+              : '';
+          return `${objective.type}:${discriminator}`;
+        })).size)
+          .toBe(level.objectives.length);
+        for (const objective of level.objectives) {
+          expect(['collect_color', 'reach_score', 'remove_blocker']).toContain(objective.type);
+          if (objective.type === 'remove_blocker') expect(objective.target).toBeLessThanOrEqual(blockers);
+        }
+      }
     });
   });
 

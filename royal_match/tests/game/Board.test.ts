@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { Board, type BoardConfig } from '../../src/game/Board';
-import { Piece } from '../../src/game/Piece';
 import { PieceType } from '../../src/types/PieceType';
 import { CellContent } from '../../src/types/GameState';
 import type { CellValue } from '../../src/levels/LevelData';
@@ -161,7 +160,7 @@ describe('Board', () => {
   });
 
   describe('gravity', () => {
-    it('should drop pieces after matches are removed', () => {
+    it('should not report movement when only the top row is empty', () => {
       const board = new Board(TEST_CONFIG);
       const layout = createHorizontalMatchLayout();
       board.initializeFromLayout(layout);
@@ -170,7 +169,22 @@ describe('Board', () => {
       board.removeMatches(matches);
 
       const moved = board.applyGravity();
-      expect(moved.length).toBeGreaterThan(0);
+      expect(moved).toHaveLength(0);
+    });
+
+    it('should drop pieces into playable gaps without crossing obstacles', () => {
+      const board = new Board(TEST_CONFIG);
+      const layout = createCleanLayout();
+      layout[2][0] = 'OBSTACLE_BOX';
+      board.initializeFromLayout(layout);
+      board.clearPositions([{ row: 3, col: 0 }, { row: 1, col: 1 }]);
+
+      const moved = board.applyGravity();
+
+      expect(board.getPiece(3, 0)).toBeNull();
+      expect(board.grid.getCell(2, 0)?.content).toBe(CellContent.OBSTACLE_BOX);
+      expect(board.getPiece(1, 1)).not.toBeNull();
+      expect(moved.some((point) => point.row === 1 && point.col === 1)).toBe(true);
     });
   });
 

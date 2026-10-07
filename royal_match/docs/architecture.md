@@ -43,16 +43,13 @@ game logic, swappable rendering, and a React UI layer.
 
 ```
 Frame N:
-  Input (touch/click) ──► InputHandler
+  Input (touch/click) ──► React board overlay
                               │
                               ▼
-                          GameManager.processInput()
+                          GameManager.trySwap()
                               │
                               ▼
                         GameState (mutated)
-                              │
-                              ▼
-              AnimationQueue ← Board.resolveMatches()
                               │
                               ▼
               GameState ← Scoring, GoalChecker
@@ -83,9 +80,9 @@ Frame N:
 - **Entity pooling**: Gem entities are created once at startup and pooled.
   Each frame, the renderer syncs entity positions/visibility/visibility
   to match the GameState Board.
-- **Animations** are driven by the `AnimationQueue` — the game logic
-  emits animation commands (MOVE piece to x,y; SCALE pop; DESTROY; SPAWN),
-  and the renderer interpolates them over ~300ms.
+- Game logic emits animation commands, but the current renderer synchronizes
+  the resolved board immediately. Interpolated movement and particle rendering
+  are explicitly pending presentation work.
 
 ## Level Storage & Loading
 
@@ -93,17 +90,16 @@ Frame N:
 - The generator is **deterministic** (seeded RNG) so any model can regenerate
   the exact same levels.
 - Levels are stored as JSON: `src/levels/levels/{start}-{end}/level-{NNNN}.json`.
-- At runtime, `LevelLoader` fetches the JSON for the current level via
-  Vite's `import.meta.glob` (static import of all 1000 files) or dynamic
-  fetch for a production CDN.
+- At runtime, `LevelLoader` uses Vite's lazy `import.meta.glob`: all 1000 paths
+  are known at build time, but only the selected level chunk is downloaded.
 
 ## Testing Strategy
 
 | Scope | Tool | What |
 |-------|------|------|
 | Unit (logic) | Vitest | Board, MatchFinder, DropSystem, Scoring, LevelGenerator |
-| Schema | Vod | LevelData JSON validation |
-| Integration | — | (future) Game loop E2E |
-| E2E | — | (future) Playwright browser tests |
+| Schema | Zod | LevelData JSON validation |
+| Integration | Vitest | GameManager turns, terminal states and special swaps |
+| E2E audit | Playwright/Chrome | Routes, WebGL, network, controls, win/loss and responsive |
 
 Unit tests run in Node (jsdom) — **no browser needed** for game logic.

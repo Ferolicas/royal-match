@@ -25,21 +25,18 @@ both light and dark backgrounds. Matches the Royal Match aesthetic.
 
 ## Gem Materials
 
-Each gem is a PlayCanvas `cube` primitive with:
-- **Diffuse** = gem color (50% opacity for translucency).
-- **Emissive** = gem color (full strength, creates glow).
-- **Specular** = white (20% intensity) for highlight sparkle.
+Each gem is a PlayCanvas `sphere` primitive with a colored StandardMaterial,
+emissive contribution, gloss and a small metallic contribution.
 
 Special pieces have distinct material modifiers:
-- **Line Clear**: white emissive + pulse animation.
-- **Bomb**: dark gray base + radial gradient texture.
-- **Color Bomb**: white base + rainbow emissive scroll.
-- **Rocket**: metallic silver + directional glow.
+- **Line Clear**: white emissive.
+- **Bomb**: orange emissive.
+- **Color Bomb**: pink emissive.
+- **Rocket**: cyan emissive.
 
 ## Particle Effects (VFX)
 
-All VFX are **procedural** (PlayCanvas particles), defined in
-`src/engine/VFXManager.ts`:
+`src/engine/VFXManager.ts` defines a procedural particle simulation model:
 
 | Effect | Particles | Lifetime | Color |
 |--------|-----------|----------|-------|
@@ -48,15 +45,13 @@ All VFX are **procedural** (PlayCanvas particles), defined in
 | Special explosion | 32 | 700ms | White → gold |
 | Level complete | 50 | 1500ms | Rainbow |
 
+These particles are not yet projected into PlayCanvas entities, so they are
+not a visible runtime feature.
+
 ## Board Theme Layers
 
-The PlayCanvas scene has these layers (bottom to top):
-1. **Background plane** — dark gradient (deep blue → purple).
-2. **Grid backdrop** — subtle hexagon/diamond pattern.
-3. **Gems layer** — the match-3 pieces (Z = 0).
-4. **Obstacle layer** — blockers (Z = 0, above gems on match).
-5. **VFX layer** — particles (Z = 1, always on top).
-6. **UI overlay** — React DOM (separate from canvas, positioned above).
+The current scene uses an orthographic camera, ambient/directional lighting,
+gem spheres, obstacle boxes and a separate React DOM control/HUD overlay.
 
 ## UI Assets
 
@@ -73,9 +68,8 @@ For when image/audio assets are added:
    and reports progress.
 3. UI shows a progress bar during load.
 
-## Audio (Planned)
+## Audio
 
-Audio is **not implemented** in this phase but the architecture supports it:
-- `src/engine/AudioManager.ts` (future) wraps Web Audio API.
-- Sound events are emitted by the game logic layer (match made, swap invalid,
-  level complete, etc.).
+A short Web Audio feedback tone and optional device vibration are triggered by
+an accepted move. Both preferences persist in local storage. Music and a full
+audio event/mixing system are not implemented.

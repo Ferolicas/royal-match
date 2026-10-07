@@ -109,33 +109,45 @@ export class MatchFinder {
   static findMatchesWithSpecials(board: string[][]): MatchResult {
     const matches = MatchFinder.findMatches(board);
     const specialPieces: MatchResult['specialPieces'] = [];
+    const shapedMatches = new Set<Match>();
+
+    const horizontal = matches.filter((match) => match.direction === 'horizontal');
+    const vertical = matches.filter((match) => match.direction === 'vertical');
+    for (const h of horizontal) {
+      for (const v of vertical) {
+        const intersects = h.color === v.color &&
+          v.start.col >= h.start.col && v.start.col <= h.end.col &&
+          h.start.row >= v.start.row && h.start.row <= v.end.row;
+        if (!intersects) continue;
+
+        shapedMatches.add(h);
+        shapedMatches.add(v);
+        const intersection = { row: h.start.row, col: v.start.col };
+        const hEndpoint = intersection.col === h.start.col || intersection.col === h.end.col;
+        const vEndpoint = intersection.row === v.start.row || intersection.row === v.end.row;
+        specialPieces.push({
+          position: intersection,
+          direction: null,
+          shape: hEndpoint && vEndpoint ? 'L' : (hEndpoint || vEndpoint ? 'T' : 'cross'),
+          color: h.color,
+        });
+      }
+    }
 
     for (const match of matches) {
-      if (match.length >= 4) {
-        const shape = MatchFinder.determineShape(match);
+      if (match.length >= 4 && !shapedMatches.has(match)) {
         specialPieces.push({
-          position: match.start,
+          position: match.direction === 'horizontal'
+            ? { row: match.start.row, col: match.start.col + Math.floor((match.length - 1) / 2) }
+            : { row: match.start.row + Math.floor((match.length - 1) / 2), col: match.start.col },
           direction: match.direction,
-          shape,
+          shape: 'line',
           color: match.color,
         });
       }
     }
 
     return { matches, specialPieces };
-  }
-
-  private static determineShape(match: Match): MatchResult['specialPieces'][number]['shape'] {
-    if (match.length >= 6) {
-      return 'line';
-    }
-    if (match.length === 5) {
-      // All matches found by MatchFinder are straight lines.
-      // T/L shape detection would require pattern matching on L/T intersections,
-      // which is a future enhancement. For now, treat all 5-matches as 'L'.
-      return 'L';
-    }
-    return 'line';
   }
 
   static hasAnyMatch(board: string[][]): boolean {

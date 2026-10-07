@@ -1,9 +1,8 @@
 import type { CellValue } from '../levels/LevelData';
-import type { ObjectiveData } from '../levels/LevelData';
 import { CellContent } from '../types/GameState';
 import type { Point } from '../types/GameState';
 import { Grid, type Cell } from './Grid';
-import { Piece, type PieceConfig } from './Piece';
+import { Piece } from './Piece';
 import type { PieceColor } from '../types/PieceType';
 import { PIECE_TYPES } from '../types/PieceType';
 import { MatchFinder } from './MatchFinder';
@@ -129,6 +128,33 @@ export class Board {
     return { matches: result.matches, specials: result.specialPieces };
   }
 
+  hasValidMove(): boolean {
+    const directions = [[1, 0], [0, 1]] as const;
+    for (let row = 0; row < this.config.rows; row++) {
+      for (let col = 0; col < this.config.cols; col++) {
+        if (!this.getPiece(row, col)) continue;
+        for (const [dr, dc] of directions) {
+          const nextRow = row + dr;
+          const nextCol = col + dc;
+          if (!this.getPiece(nextRow, nextCol)) continue;
+          this.swapPieces(row, col, nextRow, nextCol);
+          const valid = this.findMatches().matches.some((match) =>
+            this.matchContains(match, row, col) || this.matchContains(match, nextRow, nextCol)
+          );
+          this.swapPieces(row, col, nextRow, nextCol);
+          if (valid) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private matchContains(match: ReturnType<typeof MatchFinder.findMatches>[number], row: number, col: number): boolean {
+    return match.direction === 'horizontal'
+      ? row === match.start.row && col >= match.start.col && col <= match.end.col
+      : col === match.start.col && row >= match.start.row && row <= match.end.row;
+  }
+
   toSerializedBoard(): string[][] {
     const result: string[][] = [];
     for (let r = 0; r < this.config.rows; r++) {
@@ -152,16 +178,25 @@ export class Board {
 
   removeMatches(matches: ReturnType<typeof MatchFinder.findMatches>): Point[] {
     const destroyed: Point[] = [];
+    const seen = new Set<string>();
 
     for (const match of matches) {
       const { start, end, direction } = match;
       if (direction === 'horizontal') {
         for (let c = start.col; c <= end.col; c++) {
-          destroyed.push(this.removePieceAt(start.row, c));
+          const key = `${start.row},${c}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            destroyed.push(this.removePieceAt(start.row, c));
+          }
         }
       } else {
         for (let r = start.row; r <= end.row; r++) {
-          destroyed.push(this.removePieceAt(r, start.col));
+          const key = `${r},${start.col}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            destroyed.push(this.removePieceAt(r, start.col));
+          }
         }
       }
     }
@@ -176,19 +211,73 @@ export class Board {
     cell.gemColor = undefined;
     cell.specialType = null;
     this.grid.setCell(row, col, cell);
+    this.destroyedThisTurn.push({ row, col });
     return { row, col };
+  }
+
+  clearPositions(points: Point[]): Point[] {
+    const cleared: Point[] = [];
+    const seen = new Set<string>();
+    for (const point of points) {
+      const key = `${point.row},${point.col}`;
+      if (seen.has(key) || !this.getPiece(point.row, point.col)) continue;
+      seen.add(key);
+      cleared.push(this.removePieceAt(point.row, point.col));
+    }
+    return cleared;
+  }
+
+  setSpecial(row: number, col: number, special: Exclude<SpecialType, SpecialType.NONE>): void {
+    const piece = this.getPiece(row, col);
+    if (!piece) return;
+    piece.special = special;
+    const cell = this.grid.getCell(row, col);
+    if (cell) cell.specialType = special;
+  }
+
+  damageAdjacentObstacles(points: Point[]): Point[] {
+    const candidates = new Set<string>();
+    for (const point of points) {
+      for (const neighbor of this.grid.getNeighbors(point.row, point.col)) {
+        candidates.add(`${neighbor.row},${neighbor.col}`);
+      }
+    }
+
+    const destroyed: Point[] = [];
+    for (const key of candidates) {
+      const [row, col] = key.split(',').map(Number);
+      const cell = this.grid.getCell(row, col);
+      if (!cell || !this.isObstacle(cell.content)) continue;
+      cell.health = Math.max(0, (cell.health ?? 1) - 1);
+      if (cell.health === 0) {
+        cell.content = CellContent.EMPTY;
+        destroyed.push({ row, col });
+      }
+    }
+    return destroyed;
+  }
+
+  private isObstacle(content: CellContent): boolean {
+    return content === CellContent.OBSTACLE_BOX ||
+      content === CellContent.OBSTACLE_CAGE ||
+      content === CellContent.OBSTACLE_ICE ||
+      content === CellContent.OBSTACLE_STONE;
   }
 
   applyGravity(): Point[] {
     const moved: Point[] = [];
 
     for (let c = 0; c < this.config.cols; c++) {
-      let writeRow = -1;
+      let writeRow = this.config.rows - 1;
 
       for (let r = this.config.rows - 1; r >= 0; r--) {
         const cell = this.grid.getCell(r, c);
+        if (cell && cell.content !== CellContent.EMPTY) {
+          writeRow = r - 1;
+          continue;
+        }
         if (this.pieces[r][c] !== null) {
-          if (writeRow >= 0) {
+          if (writeRow !== r) {
             // Move piece from r to writeRow
             const piece = this.pieces[r][c]!;
             this.pieces[writeRow][c] = piece;
@@ -208,11 +297,7 @@ export class Board {
 
             moved.push({ row: writeRow, col: c });
           }
-          writeRow = writeRow >= 0 ? writeRow - 1 : r - 1;
-        } else if (writeRow >= 0) {
-          // Empty space, continue looking
-        } else {
-          writeRow = r - 1;
+          writeRow--;
         }
       }
     }
@@ -227,8 +312,7 @@ export class Board {
       for (let r = this.config.rows - 1; r >= 0; r--) {
         if (this.pieces[r][c] === null) {
           const cell = this.grid.getCell(r, c);
-          if (cell && cell.content === CellContent.BLOCKED) continue;
-          if (cell && cell.content === CellContent.VOID) continue;
+          if (cell && cell.content !== CellContent.EMPTY) continue;
 
           const color = this.randomColor();
           const piece = new Piece({

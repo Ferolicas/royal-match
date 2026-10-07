@@ -41,7 +41,7 @@ export class EntityManager {
   }
 
   /** Create or sync a gem entity to match the renderable state. */
-  syncGem(renderable: RenderableGem, engineApp: unknown): void {
+  syncGem(renderable: RenderableGem, _engineApp: unknown): void {
     const cellId = this.getCellId(renderable.row, renderable.col);
 
     if (renderable.visible) {

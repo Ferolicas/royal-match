@@ -1,12 +1,10 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { TOTAL_LEVELS } from '../../levels/Difficulty';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { getDifficulty } from '../../levels/Difficulty';
 import { Difficulty } from '../../types/Difficulty';
 
 export function LevelSelect() {
   const navigate = useNavigate();
-  const { levelNumber } = useParams<{ levelNumber: string }>();
   const [selectedWorld, setSelectedWorld] = useState(1);
 
   const worlds = [
@@ -16,8 +14,8 @@ export function LevelSelect() {
     { id: 4, name: 'Castle Realm', levels: [701, 1000] },
   ];
 
-  const startLevel = (selectedWorld - 1) * 100 + 1;
-  const endLevel = selectedWorld * 100;
+  const selectedRange = worlds.find((world) => world.id === selectedWorld)?.levels ?? [1, 100];
+  const [startLevel, endLevel] = selectedRange;
   const levels = Array.from({ length: endLevel - startLevel + 1 }, (_, i) => startLevel + i);
 
   const getLevelStars = (levelNum: number): number => {

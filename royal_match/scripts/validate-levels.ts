@@ -1,9 +1,11 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { LevelDataSchema } from '../src/levels/LevelData';
 import { TOTAL_LEVELS, getFolderRange, getLevelFilename } from '../src/levels/Difficulty';
 
-const LEVELS_DIR = path.resolve(__dirname, '../src/levels/levels');
+const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const LEVELS_DIR = path.resolve(SCRIPT_DIR, '../src/levels/levels');
 
 interface ValidationResult {
   levelNumber: number;
@@ -58,11 +60,12 @@ async function validateAll(): Promise<ValidationResult[]> {
   return results;
 }
 
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   validateAll().catch((err) => {
     console.error('❌ Validation failed:', err);
     process.exit(1);
   });
 }
 
-export { validateAll, ValidationResult };
+export { validateAll };
+export type { ValidationResult };

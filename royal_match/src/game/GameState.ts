@@ -1,9 +1,6 @@
-import type { PieceColor } from '../types/PieceType';
-import type { SpecialName } from '../types/SpecialType';
-import type { Point, Match } from '../types/GameState';
+import type { Match } from '../types/GameState';
 import { Difficulty } from '../types/Difficulty';
 import type { ObjectiveData, RuntimeObjective, CellValue } from '../levels/LevelData';
-import { CellContent } from '../types/GameState';
 
 export enum GameStatus {
   IDLE = 'IDLE',
@@ -70,7 +67,7 @@ export class GameState {
     if (state.score >= state.star3) return 3;
     if (state.score >= state.star2) return 2;
     if (state.score >= state.star1) return 1;
-    return 0;
+    return state.status === GameStatus.WIN ? 1 : 0;
   }
 
   static isLevelComplete(state: GameStateData): boolean {

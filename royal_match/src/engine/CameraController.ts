@@ -48,7 +48,6 @@ export class CameraController {
     rows: number,
     cols: number
   ): { row: number; col: number } | null {
-    const boardSize = Math.max(rows, cols);
     const cellSize = 1; // 1 unit per cell
     const boardWidth = cols * cellSize;
     const boardHeight = rows * cellSize;

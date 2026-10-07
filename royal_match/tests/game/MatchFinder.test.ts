@@ -110,6 +110,37 @@ describe('MatchFinder', () => {
       const result = MatchFinder.findMatchesWithSpecials(board);
       expect(result.specialPieces.length).toBe(1);
     });
+
+    it('classifies intersecting matches as a T shape instead of a straight five', () => {
+      const board = createCleanBoard(8, 8);
+      board[2][1] = 'GEM_RED';
+      board[2][2] = 'GEM_RED';
+      board[2][3] = 'GEM_RED';
+      board[0][2] = 'GEM_RED';
+      board[1][2] = 'GEM_RED';
+
+      const result = MatchFinder.findMatchesWithSpecials(board);
+
+      expect(result.matches).toHaveLength(2);
+      expect(result.specialPieces).toEqual(expect.arrayContaining([
+        expect.objectContaining({ position: { row: 2, col: 2 }, shape: 'T' }),
+      ]));
+    });
+
+    it('classifies two intersecting endpoints as an L shape', () => {
+      const board = createCleanBoard(8, 8);
+      board[2][2] = 'GEM_RED';
+      board[2][3] = 'GEM_RED';
+      board[2][4] = 'GEM_RED';
+      board[3][2] = 'GEM_RED';
+      board[4][2] = 'GEM_RED';
+
+      const result = MatchFinder.findMatchesWithSpecials(board);
+
+      expect(result.specialPieces).toEqual(expect.arrayContaining([
+        expect.objectContaining({ position: { row: 2, col: 2 }, shape: 'L' }),
+      ]));
+    });
   });
 
   describe('hasAnyMatch', () => {

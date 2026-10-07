@@ -1,6 +1,5 @@
 import type { Point } from '../types/GameState';
 import { SpecialType } from '../types/SpecialType';
-import { CellContent } from '../types/GameState';
 
 export interface SpecialEffect {
   type: 'line_clear' | 'bomb' | 'color_bomb' | 'rocket';
@@ -138,7 +137,7 @@ export class SpecialAbilities {
     if (match.length >= 6) return SpecialType.ROCKET;
     if (match.length === 5) {
       if (match.shape === 'L') return SpecialType.COLOR_BOMB;
-      if (match.shape === 'T') return SpecialType.BOMB;
+      if (match.shape === 'T' || match.shape === 'cross') return SpecialType.BOMB;
       return SpecialType.LINE;
     }
     if (match.length === 4) return SpecialType.LINE;

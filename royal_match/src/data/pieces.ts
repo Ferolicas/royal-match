@@ -1,5 +1,4 @@
 import type { GemColor } from './colors';
-import type { SpecialType } from '../types/SpecialType';
 
 export interface PieceDefinition {
   readonly type: 'gem';

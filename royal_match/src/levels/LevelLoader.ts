@@ -1,20 +1,20 @@
 import type { LevelData } from './LevelData';
 import { LevelDataSchema } from './LevelData';
 import { getLevelPath } from './Difficulty';
-import { GameStatus, GameState, type GameStateData } from '../game/GameState';
+import { GameState, type GameStateData } from '../game/GameState';
+
+const levelModules = import.meta.glob<{ default: unknown }>('./levels/**/*.json');
 
 export class LevelLoader {
-  private levelsBasePath: string = 'src/levels/levels';
-
   async loadLevel(levelNumber: number): Promise<LevelData> {
-    const path = this.getLevelPath(levelNumber);
-
-    const response = await fetch(path);
-    if (!response.ok) {
-      throw new Error(`Failed to load level ${levelNumber}: ${response.status}`);
+    if (!Number.isInteger(levelNumber) || levelNumber < 1 || levelNumber > 1000) {
+      throw new Error(`Invalid level number: ${levelNumber}`);
     }
-
-    const json = (await response.json()) as unknown;
+    const path = this.getLevelPath(levelNumber);
+    const loadModule = levelModules[path];
+    if (!loadModule) throw new Error(`Level module not found: ${path}`);
+    const module = await loadModule();
+    const json = module.default ?? module;
     const parsed = this.validateLevel(json);
 
     if (!parsed.success) {
@@ -27,8 +27,7 @@ export class LevelLoader {
   }
 
   getLevelPath(levelNumber: number): string {
-    const relativePath = getLevelPath(levelNumber);
-    return `/${this.levelsBasePath}/${relativePath}`.replace('//', '/');
+    return `./${getLevelPath(levelNumber)}`;
   }
 
   validateLevel(json: unknown) {
@@ -37,14 +36,5 @@ export class LevelLoader {
 
   createGameState(levelData: LevelData): GameStateData {
     return GameState.create(levelData);
-  }
-
-  async loadLevelDirect(importFn: (levelNumber: number) => Promise<unknown>, levelNumber: number): Promise<LevelData> {
-    const json = await importFn(levelNumber);
-    const parsed = this.validateLevel(json);
-    if (!parsed.success) {
-      throw new Error(`Level ${levelNumber} validation failed`);
-    }
-    return parsed.data;
   }
 }

@@ -9,14 +9,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src --fix --ignore-path .eslintignore",
-    "lint:check": "eslint src --ignore-path .eslintignore",
+    "lint": "eslint src scripts tests --fix",
+    "lint:check": "eslint src scripts tests",
     "typecheck": "tsc --noEmit",
-    "generate:levels": "ts-node --project tsconfig.scripts.json scripts/generate-levels.ts",
-    "generate:levels:watch": "ts-node --project tsconfig.scripts.json scripts/generate-levels.ts --watch",
-    "validate:levels": "ts-node --project tsconfig.scripts.json scripts/validate-levels.ts"
+    "generate:levels": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/generate-levels.ts",
+    "generate:levels:watch": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/generate-levels.ts --watch",
+    "validate:levels": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/validate-levels.ts"
   },
   "dependencies": {
     "playcanvas": "^2.0.0",

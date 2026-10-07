@@ -3,8 +3,10 @@ import { CameraController } from './CameraController';
 import { VFXManager } from './VFXManager';
 import { EntityManager } from './EntityManager';
 import { MaterialFactory } from './AssetLoader';
-import type { AnimationCommand, AnimationType } from '../types/GameState';
-import { AnimationQueue, type QueuedAnimation } from '../game/AnimationQueue';
+import { GEM_COLORS } from '../data/colors';
+import type { AnimationCommand } from '../types/GameState';
+import { AnimationQueue } from '../game/AnimationQueue';
+import { SpecialType } from '../types/SpecialType';
 
 /**
  * PlayCanvas application wrapper.
@@ -12,7 +14,8 @@ import { AnimationQueue, type QueuedAnimation } from '../game/AnimationQueue';
  * All gem entities are pooled via the ObjectPool pattern for performance.
  */
 export class PlayCanvasApp implements IGameEngine {
-  private app: unknown = null;
+  private app: import('playcanvas').Application | null = null;
+  private pc: typeof import('playcanvas') | null = null;
   private canvas: HTMLCanvasElement | null = null;
   private cameraController: CameraController;
   private vfxManager: VFXManager;
@@ -20,11 +23,13 @@ export class PlayCanvasApp implements IGameEngine {
   private animationQueue: AnimationQueue;
   private eventHandlers: Map<EngineEventType, EngineEventHandler[]> = new Map();
   private initialized: boolean = false;
-  private gemEntities: Map<string, unknown> = new Map();
-  private obstacleCache: Map<string, unknown> = new Map();
-  private animationIdCounter: number = 0;
-  private lastTime: number = 0;
-
+  private destroyed: boolean = false;
+  private gemEntities: Map<string, import('playcanvas').Entity> = new Map();
+  private obstacleCache: Map<string, import('playcanvas').Entity> = new Map();
+  private gemPool: import('playcanvas').Entity[] = [];
+  private obstaclePool: import('playcanvas').Entity[] = [];
+  private materials: Map<string, import('playcanvas').StandardMaterial> = new Map();
+  private cameraEntity: import('playcanvas').Entity | null = null;
   constructor() {
     this.cameraController = new CameraController();
     this.vfxManager = new VFXManager();
@@ -34,72 +39,54 @@ export class PlayCanvasApp implements IGameEngine {
 
   /**
    * Initialize the PlayCanvas application on the given canvas.
-   * Since the `playcanvas` npm package may not resolve in all environments,
-   * we gracefully handle its absence by running in simulation mode.
+   * Initialization failures are surfaced to the UI. A blank simulation is
+   * not a valid renderer for a PlayCanvas game.
    */
   async initialize(canvas: HTMLCanvasElement): Promise<void> {
     this.canvas = canvas;
     this.canvas.width = this.canvas.clientWidth || 800;
     this.canvas.height = this.canvas.clientHeight || 600;
 
-    // Try to initialize PlayCore engine; fall back to canvas 2D fallback if unavailable
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const pc = await this.loadPlayCanvas();
-      if (pc) {
-        this.setupPlayCanvasApp(pc, canvas);
-      } else {
-        console.warn('[PlayCanvasApp] PlayCanvas not available, using simulation mode');
-      }
-    } catch (err) {
-      console.warn('[PlayCanvasApp] Falling back to simulation mode:', err);
-    }
+    const pc = await import('playcanvas');
+    if (this.destroyed) throw new DOMException('PlayCanvas initialization was cancelled', 'AbortError');
+    this.pc = pc;
+    this.setupPlayCanvasApp(pc, canvas);
 
     this.cameraController.fitToBoard(8, 8);
     this.cameraController.setAspectRatio(this.canvas.width / this.canvas.height);
     this.initialized = true;
+    this.canvas.dataset.playcanvasReady = 'true';
     this.emit('render_ready');
-  }
-
-  private async loadPlayCanvas(): Promise<typeof import('playcanvas') | null> {
-    try {
-      const pc = await import('playcanvas');
-      return pc;
-    } catch {
-      return null;
-    }
   }
 
   private setupPlayCanvasApp(pc: typeof import('playcanvas'), canvas: HTMLCanvasElement): void {
     const app = new pc.Application(canvas, {
-      keyboard: new pc.Keyboard(canvas as unknown as HTMLElement),
+      keyboard: new pc.Keyboard(window),
       mouse: new pc.Mouse(canvas),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      touch: new (pc as any).TouchDevice(canvas),
-      graphicsDevice: new pc.GraphicsDevice(canvas.getContext('webgl') as WebGLRenderingContext, {
+      touch: new pc.TouchDevice(canvas),
+      graphicsDeviceOptions: {
         antialias: true,
         alpha: true,
-      }),
+      },
     });
 
     this.app = app;
 
     // Setup scene
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const scene = app.scene as any as { getRoot: () => any; ambientLight: any };
-    scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
+    app.scene.ambientLight = new pc.Color(0.35, 0.35, 0.4);
 
     // Camera
     const cameraEntity = new pc.Entity('camera');
     cameraEntity.addComponent('camera', {
-      fov: 50,
-      orthoHeight: 8,
+      projection: pc.PROJECTION_ORTHOGRAPHIC,
+      orthoHeight: this.getOrthoHeight(),
       nearClip: 0.1,
       farClip: 1000,
+      clearColor: new pc.Color(0.059, 0.047, 0.161),
     });
-    scene.getRoot().addChild(cameraEntity);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (app as any as { camera: unknown }).camera = cameraEntity.camera;
+    cameraEntity.setPosition(0, 0, 10);
+    app.root.addChild(cameraEntity);
+    this.cameraEntity = cameraEntity;
 
     // Lighting
     const lightEntity = new pc.Entity('light');
@@ -109,7 +96,7 @@ export class PlayCanvasApp implements IGameEngine {
       intensity: 1.2,
     });
     lightEntity.setLocalEulerAngles(-45, 45, 0);
-    scene.getRoot().addChild(lightEntity);
+    app.root.addChild(lightEntity);
 
     // Start the app
     app.start();
@@ -131,47 +118,115 @@ export class PlayCanvasApp implements IGameEngine {
     // Sync gem entities to state
     this.syncGems(state.gems);
     this.syncObstacles(state.obstacles);
+    if (this.canvas) {
+      this.canvas.dataset.renderedGems = String(state.gems.filter((gem) => gem.visible).length);
+      this.canvas.dataset.renderedObstacles = String(state.obstacles.length);
+    }
   }
 
   private syncGems(gems: EngineState['gems']): void {
+    if (!this.pc || !this.app) return;
+    const visibleCells = new Set<string>();
     for (const gem of gems) {
       const cellId = this.entityManager.getCellId(gem.row, gem.col);
 
-      if (!gem.visible) {
-        this.gemEntities.delete(cellId);
-        continue;
-      }
+      if (!gem.visible) continue;
+      visibleCells.add(cellId);
 
-      // Position sync would happen here in real PlayCanvas
-      if (this.gemEntities.has(cellId)) {
-        // Update position/scale/color
-      } else {
-        // Create new entity (using pool)
-        const entityId = `gem_${this.animationIdCounter++}`;
-        this.gemEntities.set(cellId, {
-          ...gem,
-          entityId: `gem_${this.animationIdCounter++}`,
-          material: MaterialFactory.gemMaterial(gem.color),
-        });
+      const entity = this.gemEntities.get(cellId) ?? this.acquireGemEntity(cellId);
+      entity.enabled = true;
+      entity.setLocalPosition(gem.col - 3.5, 3.5 - gem.row, 0);
+      entity.setLocalScale(0.78 * gem.scale, 0.78 * gem.scale, 0.35);
+      const render = entity.render;
+      if (render) {
+        const baseColor = GEM_COLORS[gem.color as keyof typeof GEM_COLORS]?.hex ?? '#ffffff';
+        if (gem.special && gem.special !== SpecialType.NONE) {
+          const specialKind = gem.special === SpecialType.COLOR_BOMB
+            ? 'colorbomb'
+            : gem.special.toLowerCase() as 'line' | 'bomb' | 'rocket';
+          const spec = MaterialFactory.specialMaterial(specialKind);
+          render.material = this.getMaterial(`${gem.color}-${gem.special}`, spec.emissive);
+        } else {
+          render.material = this.getMaterial(gem.color, baseColor);
+        }
       }
     }
 
-    // Remove gems that are no longer visible
-    for (const key of this.gemEntities.keys()) {
-      const [rowStr, colStr] = key.split('_').slice(1);
-      const row = parseInt(rowStr, 10);
-      const col = parseInt(colStr, 10);
-      if (!gems.some((g) => g.row === row && g.col === col && g.visible)) {
+    for (const [key, entity] of this.gemEntities) {
+      if (!visibleCells.has(key)) {
         this.gemEntities.delete(key);
+        entity.enabled = false;
+        this.gemPool.push(entity);
       }
     }
   }
 
   private syncObstacles(obstacles: EngineState['obstacles']): void {
+    if (!this.pc || !this.app) return;
+    const visibleCells = new Set<string>();
     for (const obs of obstacles) {
       const cellId = this.entityManager.getCellId(obs.row, obs.col);
-      this.obstacleCache.set(cellId, { ...obs });
+      visibleCells.add(cellId);
+      const entity = this.obstacleCache.get(cellId) ?? this.acquireObstacleEntity(cellId);
+      entity.enabled = true;
+      entity.setLocalPosition(obs.col - 3.5, 3.5 - obs.row, 0);
+      entity.setLocalScale(0.86, 0.86, 0.5);
+      if (entity.render) {
+        const spec = MaterialFactory.obstacleMaterial(obs.content);
+        entity.render.material = this.getMaterial(obs.content, spec.diffuse);
+      }
     }
+    for (const [key, entity] of this.obstacleCache) {
+      if (!visibleCells.has(key)) {
+        this.obstacleCache.delete(key);
+        entity.enabled = false;
+        this.obstaclePool.push(entity);
+      }
+    }
+  }
+
+  private acquireGemEntity(cellId: string): import('playcanvas').Entity {
+    const entity = this.gemPool.pop() ?? this.createPrimitive('sphere');
+    entity.name = cellId;
+    this.gemEntities.set(cellId, entity);
+    return entity;
+  }
+
+  private acquireObstacleEntity(cellId: string): import('playcanvas').Entity {
+    const entity = this.obstaclePool.pop() ?? this.createPrimitive('box');
+    entity.name = `obstacle_${cellId}`;
+    this.obstacleCache.set(cellId, entity);
+    return entity;
+  }
+
+  private createPrimitive(type: 'sphere' | 'box'): import('playcanvas').Entity {
+    if (!this.pc || !this.app) throw new Error('PlayCanvas is not initialized');
+    const entity = new this.pc.Entity();
+    entity.addComponent('render', { type });
+    this.app.root.addChild(entity);
+    return entity;
+  }
+
+  private getMaterial(key: string, hex: string): import('playcanvas').StandardMaterial {
+    const existing = this.materials.get(key);
+    if (existing) return existing;
+    if (!this.pc) throw new Error('PlayCanvas is not initialized');
+    const value = parseInt(hex.replace('#', ''), 16);
+    const color = new this.pc.Color(((value >> 16) & 255) / 255, ((value >> 8) & 255) / 255, (value & 255) / 255);
+    const material = new this.pc.StandardMaterial();
+    material.diffuse.copy(color);
+    material.emissive.copy(color).mulScalar(0.22);
+    material.metalness = 0.15;
+    material.gloss = 0.72;
+    material.update();
+    this.materials.set(key, material);
+    return material;
+  }
+
+  private getOrthoHeight(): number {
+    if (!this.canvas) return 4.8;
+    const aspect = this.canvas.width / Math.max(1, this.canvas.height);
+    return Math.max(4.8, 4.8 / aspect);
   }
 
   /** Queue an animation command for processing. */
@@ -227,27 +282,32 @@ export class PlayCanvasApp implements IGameEngine {
       this.canvas.width = width;
       this.canvas.height = height;
       this.cameraController.setAspectRatio(width / height);
+      if (this.cameraEntity?.camera) this.cameraEntity.camera.orthoHeight = this.getOrthoHeight();
 
       if (this.app) {
-        // @ts-expect-error PlayCanvas app resize
-        this.app?.resizeCanvas?.(width, height);
+        this.app.resizeCanvas(width, height);
       }
     }
   }
 
   /** Clean up engine resources. */
   destroy(): void {
+    this.destroyed = true;
     this.vfxManager.clear();
     this.gemEntities.clear();
     this.obstacleCache.clear();
+    this.gemPool = [];
+    this.obstaclePool = [];
+    this.materials.clear();
     this.animationQueue.clear();
     this.eventHandlers.clear();
 
     if (this.app) {
-      // @ts-expect-error PlayCanvas app destroy
-      this.app?.destroy?.();
+      this.app.destroy();
       this.app = null;
     }
+    this.pc = null;
+    this.cameraEntity = null;
     this.initialized = false;
   }
 

@@ -1,4 +1,3 @@
-import { useEffect, useCallback } from 'react';
 import { useGameStore } from '../store';
 import type { GameStateData } from '../../game/GameState';
 import { GameStatus } from '../../game/GameState';
@@ -81,6 +80,7 @@ export function useGameEndState(): { isWin: boolean; isLose: boolean; stars: num
   if (score >= star3) stars = 3;
   else if (score >= star2) stars = 2;
   else if (score >= star1) stars = 1;
+  else if (status === GameStatus.WIN) stars = 1;
 
   return {
     isWin: status === GameStatus.WIN,

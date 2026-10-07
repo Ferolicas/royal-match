@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { LevelDataSchema, type LevelData, type CellValue, type ObjectiveData } from '../../src/levels/LevelData';
+import { LevelDataSchema, type CellValue } from '../../src/levels/LevelData';
 import { CELL_VALUES } from '../../src/levels/LevelData';
 
 describe('LevelData Schema', () => {
@@ -12,13 +12,13 @@ describe('LevelData Schema', () => {
             difficulty: 'EASY',
             title: 'Test',
             description: 'Test desc',
-            grid: { cols: 8, rows: 8 },
+            grid: { cols: 4, rows: 4 },
             moveLimit: 15,
             scoreStar1: 1000,
             scoreStar2: 1500,
             scoreStar3: 2000,
             objectives: [{ type: 'reach_score', description: 'Score', target: 5000 }],
-            boardLayout: [['EMPTY']],
+            boardLayout: Array.from({ length: 4 }, () => Array<CellValue>(4).fill(value)),
             seed: 1,
             version: '1.0.0',
           });
@@ -86,6 +86,25 @@ describe('LevelData Schema', () => {
         version: '1.0.0',
       });
       expect(result.success).toBe(true);
+    });
+
+    it('rejects collect_color without a color', () => {
+      const result = LevelDataSchema.safeParse({
+        levelNumber: 1,
+        difficulty: 'EASY',
+        title: 'Test',
+        description: 'Test desc',
+        grid: { cols: 8, rows: 8 },
+        moveLimit: 15,
+        scoreStar1: 1000,
+        scoreStar2: 1500,
+        scoreStar3: 2000,
+        objectives: [{ type: 'collect_color', description: 'Collect', target: 5 }],
+        boardLayout: create8x8Board(),
+        seed: 1,
+        version: '1.0.0',
+      });
+      expect(result.success).toBe(false);
     });
 
     it('should accept a valid collect_item objective', () => {
@@ -168,6 +187,25 @@ describe('LevelData Schema', () => {
         scoreStar3: 2000,
         objectives: [{ type: 'reach_score', description: 'Score', target: 5000 }],
         boardLayout: create8x8Board(),
+        seed: 1,
+        version: '1.0.0',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects board dimensions that do not match the declared grid', () => {
+      const result = LevelDataSchema.safeParse({
+        levelNumber: 1,
+        difficulty: 'EASY',
+        title: 'Test',
+        description: 'Test desc',
+        grid: { cols: 8, rows: 8 },
+        moveLimit: 15,
+        scoreStar1: 1000,
+        scoreStar2: 1500,
+        scoreStar3: 2000,
+        objectives: [{ type: 'reach_score', description: 'Score', target: 5000 }],
+        boardLayout: [['GEM_GREEN']],
         seed: 1,
         version: '1.0.0',
       });

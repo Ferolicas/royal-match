@@ -6,6 +6,7 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig(({ mode }) => {
   const isProduction = mode === "production";
   return {
+    base: "/royal/",
     plugins: [react(), svgr()],
     define: {
       __APP_VERSION__: JSON.stringify("dev"),
@@ -23,7 +24,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            playcanvas: ["playcanvas"],
             vendor: ["react", "react-dom"],
             router: ["react-router-dom"],
             state: ["zustand"],

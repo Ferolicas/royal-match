@@ -1,5 +1,3 @@
-import type { GEM_COLORS } from '../data/colors';
-
 /**
  * Procedural material generator for gems and obstacles.
  * Creates PlayCanvas materials purely from color definitions — no texture files needed.

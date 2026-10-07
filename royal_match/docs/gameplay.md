@@ -4,9 +4,9 @@
 
 ```
 1. Player selects a gem (touch/click).
-2. Player drags to adjacent gem (swap direction).
+2. Player selects an adjacent gem (tap/click).
 3. Game validates: does the swap create a match-3+?
-   → If NO: swap back (bounce animation).
+   → If NO: swap is rejected and no move is consumed.
    → If YES: resolve matches, apply gravity, cascade.
 4. Score is calculated, goals are checked.
 5. If no moves remain but goals met → LEVEL COMPLETE.
@@ -80,11 +80,8 @@ valid moves exist.
 2. **Reach Score** (e.g., "Score 5000 points") — earn via matches & cascades.
 3. **Remove Blocker** (e.g., "Remove 5 boxes") — destroy obstacle cells
    (usually requires special pieces or matching adjacent to them).
-4. **Collect Item** (e.g., "Collect 3 keys") — items are trapped under
-   blockers; clearing the blocker drops the item, matching a gem below it
-   collects it.
-5. **Drop Down** (e.g., "Drop 2 objects to the bottom") — objects on
-   chains/ropes fall when supporting gems are cleared.
+4. **Collect Item** — reserved in the schema, not used by generated levels.
+5. **Drop Down** — reserved in the schema, not used by generated levels.
 
 ### Victory
 
@@ -97,8 +94,7 @@ Level is **completed** when ALL objectives reach their target. Stars awarded:
 
 Level is **failed** when:
 - Moves reach 0 AND objectives not all met.
-- No valid moves exist (no cascades pending) AND objectives not met
-  (player can use a booster or restart).
+- No valid moves exist after resolution and objectives are not met.
 
 ## Progression
 
@@ -106,8 +102,6 @@ Level is **failed** when:
 - 3 stars on a level = "Mastered" — grants bonus rewards.
 - World map shows progress: `O` (unlocked), `★` (1 star), `★★` (2 stars),
   `★★★` (3 stars, mastered).
-- Difficulty peak levels (every 6th) are checkpointed — completing them
-  saves progress even if you fail the next NORMAL/HARD levels.
 
 ## Move Counter & Scoring
 
@@ -119,5 +113,5 @@ Color Bomb     = 250 × cascade_number
 Rocket         = 200 × cascade_number
 ```
 
-Every completed level awards coins based on stars (1★=10, 2★=20, 3★=50)
-for spending on boosters/lives.
+Reward metadata exists in the level files, but there is currently no wallet,
+booster economy, or shop in the runtime UI.

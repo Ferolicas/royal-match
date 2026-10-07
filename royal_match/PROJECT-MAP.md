@@ -75,11 +75,11 @@
 | File | Purpose | Status |
 |------|---------|--------|
 | `src/engine/PlayCanvasApp.ts` | Initializes & manages the PlayCanvas `PC.Application` lifecycle | [X] |
-| `src/engine/GameRenderer.ts` | Renders GameState to PlayCanvas entities (gems, board, VFX) | [X] |
+| `src/engine/GameRenderer.ts` | Converts GameState/Board into renderable gem and obstacle state | [X] |
 | `src/engine/EntityManager.ts` | Manages entity lifecycle and cell ID generation | [X] |
-| `src/engine/EntityPool.ts` | Object pool for gem entities & particles (perf) | [X] |
+| `src/engine/EntityPool.ts` | Generic pool utility; live renderer currently owns its typed pools | [~] |
 | `src/engine/CameraController.ts` | Orthographic camera setup, fit-to-screen, screen-to-board | [X] |
-| `src/engine/VFXManager.ts` | Particle effects: match explosions, sparkles | [X] |
+| `src/engine/VFXManager.ts` | Particle simulation model; PlayCanvas particle rendering is not wired | [~] |
 | `src/engine/AssetLoader.ts` | Procedural material factory, asset manifest builder | [X] |
 | `src/engine/types.ts` | Engine-specific type aliases & interfaces | [X] |
 | `src/engine/index.ts` | Barrel exports | [X] |
@@ -102,8 +102,8 @@
 | `src/game/SpecialAbilities.ts` | Activates special pieces: line clear, bomb, color bomb, rocket | [X] |
 | `src/game/Scoring.ts` | Score calculation, combo multipliers, star thresholds | [X] |
 | `src/game/GoalChecker.ts` | Checks win conditions, objective progress | [X] |
-| `src/game/InputHandler.ts` | Normalizes touch/mouse input into board actions | [X] |
-| `src/game/AnimationQueue.ts` | Queues animations between logic steps (for rendering) | [X] |
+| `src/game/InputHandler.ts` | Optional pointer normalizer; current React overlay handles input directly | [~] |
+| `src/game/AnimationQueue.ts` | Animation command queue; commands exist but visual interpolation is pending | [~] |
 | `src/game/index.ts` | Barrel exports | [X] |
 
 ---
@@ -136,18 +136,18 @@
 | `src/ui/App.tsx` | Main router, game container | [X] |
 | `src/ui/store.ts` | Zustand store with game state & actions | [X] |
 | `src/ui/hooks/useGameState.ts` | Zustand subscription hooks (moves, score, goals, status) | [X] |
-| `src/ui/hooks/useGameLoop.ts` | Sets up the game tick / animation frame loop | [X] |
+| `src/ui/hooks/useGameLoop.ts` | Reserved animation-frame hook; not used by the current synchronous renderer | [ ] |
 | `src/ui/components/Button.tsx` | Reusable button component | [X] |
 | `src/ui/components/GemIcon.tsx` | Small gem icon for UI (color prop) | [X] |
 | `src/ui/components/ProgressBar.tsx` | Moves / health / progress bar | [X] |
 | `src/ui/components/HUD.tsx` | In-game HUD: moves, score, objectives, stars | [X] |
 | `src/ui/screens/SplashScreen.tsx` | Initial splash with loading bar | [X] |
-| `src/ui/screens/MainMenuScreen.tsx` | Main menu (play, settings, shop) | [X] |
+| `src/ui/screens/MainMenuScreen.tsx` | Main menu (play and settings) | [X] |
 | `src/ui/screens/LevelSelectScreen.tsx` | Level grid selector with star progress | [X] |
 | `src/ui/screens/GameScreen.tsx` | Active game screen (canvas + HUD overlay) | [X] |
 | `src/ui/screens/LevelCompleteScreen.tsx` | Post-level results (stars earned) | [X] |
-| `src/ui/screens/SettingsScreen.tsx` | Settings (sound, music, vibration toggles) | [X] |
-| `src/ui/screens/ShopScreen.tsx` | Shop screen (stub) | [X] |
+| `src/ui/screens/SettingsScreen.tsx` | Persistent sound-effect and vibration preferences | [X] |
+| `src/ui/screens/ShopScreen.tsx` | Unrouted future shop placeholder | [ ] |
 
 ---
 
@@ -216,6 +216,8 @@
 | `tests/game/MatchFinder.test.ts` | Match detection (horizontal, vertical, 4+, multi, dedup) | [X] |
 | `tests/game/DropSystem.test.ts` | Gravity/drop/fill tests | [X] |
 | `tests/game/SpecialAbilities.test.ts` | Special piece effect tests | [X] |
+| `tests/game/GameManager.test.ts` | Turns, terminal states, invalid and special swaps | [X] |
+| `tests/game/Scoring.test.ts` | Match-size, cascade and star-rating regressions | [X] |
 | `tests/levels/LevelGenerator.test.ts` | Level generation & difficulty tests | [X] |
 | `tests/levels/LevelData.test.ts` | Schema validation tests | [X] |
 
@@ -240,14 +242,14 @@
 | Root Config | 11 | 11 | 0 | 0 |
 | Context & Docs | 7 | 7 | 0 | 0 |
 | Entry Points | 3 | 3 | 0 | 0 |
-| Engine Layer | 9 | 9 | 0 | 0 |
-| Game Logic | 13 | 13 | 0 | 0 |
+| Engine Layer | 9 | 7 | 2 | 0 |
+| Game Logic | 13 | 11 | 2 | 0 |
 | Level System | 6+10 dirs | 6+10 | 0 | 0 |
-| UI Layer | 15 | 15 | 0 | 0 |
+| UI Layer | 15 | 13 | 0 | 2 |
 | Shared Types | 6 | 6 | 0 | 0 |
 | Static Data | 6 | 6 | 0 | 0 |
 | Utilities | 3 | 3 | 0 | 0 |
 | Scripts | 3 | 3 | 0 | 0 |
-| Tests | 7 | 7 | 0 | 0 |
+| Tests | 9 | 9 | 0 | 0 |
 | Public Assets | 2 | 2 | 0 | 0 |
-| **Total** | **~85** | **85** | **0** | **0** |
+| **Total** | **~85** | **79** | **4** | **2** |

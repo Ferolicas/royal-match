@@ -1,9 +1,11 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { generateLevel, getLevelRange } from '../src/levels/LevelGenerator';
-import { TOTAL_LEVELS, LEVELS_PER_FOLDER, getLevelPath, getLevelFilename, getFolderRange } from '../src/levels/Difficulty';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { generateLevel } from '../src/levels/LevelGenerator';
+import { TOTAL_LEVELS, getLevelFilename, getFolderRange } from '../src/levels/Difficulty';
 
-const LEVELS_DIR = path.resolve(__dirname, '../src/levels/levels');
+const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const LEVELS_DIR = path.resolve(SCRIPT_DIR, '../src/levels/levels');
 
 /** Generates all 1000 level JSON files and writes them to disk. */
 async function main(watch: boolean = false): Promise<void> {
@@ -50,7 +52,7 @@ async function main(watch: boolean = false): Promise<void> {
 }
 
 // CLI entry
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const watch = process.argv.includes('--watch');
   main(watch).catch((err) => {
     console.error('❌ Level generation failed:', err);

@@ -14,25 +14,25 @@ difficulty (every 3rd = Hard, every 6th = Super Hard).
 
 ```bash
 # Start dev server (Vite, port 3000)
-pnpm dev
+npm run dev
 
 # Build for production
-pnpm build
+npm run build
 
 # Run tests
-pnpm test          # watch mode
-pnpm test:run      # single run (CI)
-pnpm test:coverage
+npm test          # watch mode
+npm run test:run  # single run (CI)
+npm run test:coverage
 
 # Typecheck
-pnpm typecheck
+npm run typecheck
 
 # Lint
-pnpm lint          # fix
-pnpm lint:check    # check only
+npm run lint       # fix
+npm run lint:check # check only
 
 # Regenerate all 1000 level JSON files (deterministic)
-pnpm generate:levels
+npm run generate:levels
 ```
 
 ## Architecture Rules
@@ -57,7 +57,7 @@ UI: GameState -> React components (subscribe via useStore)
 
 ## Level Data
 
-- **Generator:** `scripts/generate-levels.ts` (run `pnpm generate:levels`)
+- **Generator:** `scripts/generate-levels.ts` (run `npm run generate:levels`)
 - **Output:** `src/levels/levels/{start}-{end}/level-{NNNN}.json` (100 per folder)
 - **Schema:** `src/levels/LevelData.ts` (Zod-validated)
 - **Difficulty:** Level `% 6 == 0` → SUPER_HARD, `% 3 == 0` → HARD,

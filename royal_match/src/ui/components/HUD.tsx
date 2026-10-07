@@ -9,18 +9,17 @@ export function HUD() {
   const {
     movesRemaining,
     moveLimit,
+    levelNumber,
     score,
     star1,
     star2,
     star3,
-    gridCols,
-    gridRows,
     isLevelLoading,
   } = useGameState();
 
   const status = useGameStatus();
   const { restartLevel } = useGameActions();
-  const { isWin, isLose, stars } = useGameEndState();
+  const { isWin, stars } = useGameEndState();
 
   const showWinLose = status === GameStatus.WIN || status === GameStatus.LOSE;
 
@@ -28,6 +27,10 @@ export function HUD() {
     <div className="hud">
       {/* Top bar: moves and score */}
       <div className="hud__top">
+        <div className="hud__level">
+          <span className="hud__label">LEVEL</span>
+          <span className="hud__value">{levelNumber}</span>
+        </div>
         <div className="hud__moves">
           <span className="hud__label">MOVES</span>
           <span className="hud__value">{movesRemaining}/{moveLimit}</span>
@@ -95,7 +98,7 @@ function ObjectivesPanel() {
   return (
     <div className="hud__objectives">
       {objectives.map((obj, index) => (
-        <ObjectiveItem key={index} objective={obj} index={index} />
+        <ObjectiveItem key={index} objective={obj} />
       ))}
     </div>
   );
@@ -103,10 +106,8 @@ function ObjectivesPanel() {
 
 function ObjectiveItem({
   objective,
-  index,
 }: {
   objective: ObjectiveData;
-  index: number;
 }) {
   const current = (objective as { current: number }).current ?? 0;
   const target = objective.target;

@@ -12,8 +12,6 @@ export function useGameLoop() {
 
   const isAnimating = useGameStore((s) => s.isAnimating);
   const status = useGameStore((s) => s.status);
-  const gameManager = useGameStore((s) => s.gameManager);
-
   const startLoop = useCallback(() => {
     if (animationFrameId.current !== null) return;
 

@@ -2,9 +2,6 @@ import type { EngineState, RenderableGem } from './types';
 import type { GameStateData } from '../game/GameState';
 import type { Board } from '../game/Board';
 import { CellContent } from '../types/GameState';
-import { SpecialType } from '../types/SpecialType';
-import type { SpecialName } from '../types/SpecialType';
-import { GEM_COLORS } from '../data/colors';
 import { EntityManager } from './EntityManager';
 
 /**
@@ -33,7 +30,6 @@ export class GameRenderer {
 
         if (piece && piece.collected === false) {
           // Active gem piece
-          const gemColor = piece.color as keyof typeof GEM_COLORS;
           gems.push({
             entityId: this.entityManager.getCellId(r, c),
             row: r,

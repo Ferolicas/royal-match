@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 export function SettingsScreen() {
   const navigate = useNavigate();
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [musicEnabled, setMusicEnabled] = useState(true);
-  const [vibrationEnabled, setVibrationEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = usePersistentSetting('sound', true);
+  const [vibrationEnabled, setVibrationEnabled] = usePersistentSetting('vibration', true);
 
   return (
     <div className="screen screen--settings">
@@ -25,11 +24,6 @@ export function SettingsScreen() {
           label="Sound"
           value={soundEnabled}
           onChange={setSoundEnabled}
-        />
-        <ToggleRow
-          label="Music"
-          value={musicEnabled}
-          onChange={setMusicEnabled}
         />
         <ToggleRow
           label="Vibration"
@@ -53,12 +47,31 @@ function ToggleRow({
   return (
     <div className="setting-row">
       <span>{label}</span>
-      <div
+      <button
+        type="button"
+        role="switch"
+        aria-checked={value}
+        aria-label={label}
         className={`toggle ${value ? 'toggle--on' : 'toggle--off'}`}
         onClick={() => onChange(!value)}
       >
-        <div className="toggle__knob" />
-      </div>
+        <span className="toggle__knob" />
+      </button>
     </div>
   );
+}
+
+function usePersistentSetting(key: string, defaultValue: boolean) {
+  const storageKey = `royal_match_${key}_enabled`;
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(storageKey);
+    return stored === null ? defaultValue : stored === 'true';
+  });
+
+  const update = (nextValue: boolean) => {
+    localStorage.setItem(storageKey, String(nextValue));
+    setValue(nextValue);
+  };
+
+  return [value, update] as const;
 }

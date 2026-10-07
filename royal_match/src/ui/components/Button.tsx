@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import type { GemColor } from '../../data/colors';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'icon' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';

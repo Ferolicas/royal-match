@@ -26,13 +26,6 @@ export function MainMenu() {
           Settings
         </button>
 
-        <button
-          type="button"
-          className="btn btn--secondary"
-          onClick={() => navigate('/shop')}
-        >
-          Shop
-        </button>
       </div>
 
       <div className="menu__footer">

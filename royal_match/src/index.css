@@ -179,10 +179,9 @@ html, body, #root {
 
 /* HUD */
 .hud {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  width: 100%;
+  flex: 0 0 auto;
   z-index: 10;
   padding: 12px 16px;
   display: flex;
@@ -202,6 +201,7 @@ html, body, #root {
 }
 
 .hud__moves,
+.hud__level,
 .hud__score {
   display: flex;
   flex-direction: column;
@@ -350,14 +350,20 @@ html, body, #root {
 
 /* Game Screen */
 .screen--game {
-  flex-direction: row;
+  flex-direction: column;
   padding: 0;
   gap: 0;
   position: relative;
 }
 
+.game__board {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+}
+
 .game__canvas {
-  flex: 1;
   width: 100%;
   height: 100%;
   display: block;
@@ -379,11 +385,31 @@ html, body, #root {
   pointer-events: auto;
   cursor: pointer;
   border: 1px solid transparent;
+  padding: 0;
+  background: transparent;
+}
+
+.board-cell--selected {
+  border-color: var(--accent-gold);
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.game__engine-error {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #7f1d1d;
+  color: white;
 }
 
 /* Level Select */
 .screen--level-select {
   flex-direction: column;
+  justify-content: flex-start;
   gap: 16px;
 }
 
@@ -551,6 +577,8 @@ html, body, #root {
   background: #444;
   cursor: pointer;
   transition: var(--transition);
+  padding: 0;
+  border: 0;
 }
 
 .toggle--on {

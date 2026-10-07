@@ -1,8 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useGameStore } from '../store';
 import { useGameEndState } from '../hooks/useGameState';
-import { GameStatus } from '../../game/GameState';
 
 export function LevelComplete() {
   const { levelNumber } = useParams<{ levelNumber: string }>();
@@ -10,13 +7,6 @@ export function LevelComplete() {
   const numericLevel = levelNumber ? parseInt(levelNumber, 10) : 1;
 
   const { stars, isWin } = useGameEndState();
-  const { restartLevel, currentLevelNumber } = useGameStore(
-    (s) => ({
-      restartLevel: s.restartLevel,
-      currentLevelNumber: s.currentLevelNumber,
-    }),
-  );
-
   const nextLevel = numericLevel + 1;
   const canContinue = numericLevel < 1000;
 
