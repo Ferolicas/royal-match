@@ -1,0 +1,150 @@
+{
+  "levelNumber": 498,
+  "difficulty": 3,
+  "title": "Final Push — Mountain Realm",
+  "description": "Difficulty: SUPER_HARD | Realm: Mountain Realm",
+  "grid": {
+    "cols": 9,
+    "rows": 11
+  },
+  "moveLimit": 44,
+  "scoreStar1": 6336,
+  "scoreStar2": 9504,
+  "scoreStar3": 13939,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Elimina obstáculos",
+      "target": 24
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "OBSTACLE_STONE",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "OBSTACLE_STONE",
+      "GEM_YELLOW",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_RED"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "OBSTACLE_STONE",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE"
+    ],
+    [
+      "OBSTACLE_BOX",
+      "OBSTACLE_BOX",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_BLUE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_RED",
+      "OBSTACLE_STONE",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "OBSTACLE_STONE"
+    ],
+    [
+      "OBSTACLE_ICE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "OBSTACLE_STONE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "OBSTACLE_ICE",
+      "OBSTACLE_STONE",
+      "GEM_BLUE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "OBSTACLE_STONE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "OBSTACLE_STONE",
+      "GEM_CYAN",
+      "OBSTACLE_STONE"
+    ],
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "OBSTACLE_BOX",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE"
+    ]
+  ],
+  "rewards": {
+    "coins": 30,
+    "stars": 3
+  },
+  "seed": 31808,
+  "version": "1.0.0"
+}

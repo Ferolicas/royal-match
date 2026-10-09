@@ -1,0 +1,150 @@
+{
+  "levelNumber": 999,
+  "difficulty": 2,
+  "title": "Ancient Color Storm",
+  "description": "Difficulty: HARD | Realm: Castle Realm",
+  "grid": {
+    "cols": 9,
+    "rows": 11
+  },
+  "moveLimit": 52,
+  "scoreStar1": 5408,
+  "scoreStar2": 8112,
+  "scoreStar3": 11898,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Elimina obstáculos",
+      "target": 16
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE"
+    ],
+    [
+      "OBSTACLE_ICE",
+      "OBSTACLE_ICE",
+      "OBSTACLE_CAGE",
+      "GEM_YELLOW",
+      "GEM_PURPLE",
+      "OBSTACLE_ICE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_GREEN",
+      "GEM_RED",
+      "OBSTACLE_CAGE",
+      "GEM_BLUE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "OBSTACLE_ICE",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_ICE",
+      "GEM_CYAN",
+      "OBSTACLE_BOX"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "OBSTACLE_ICE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_CYAN",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "OBSTACLE_ICE",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "OBSTACLE_CAGE",
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_RED"
+    ],
+    [
+      "OBSTACLE_ICE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_BLUE"
+    ]
+  ],
+  "rewards": {
+    "coins": 20,
+    "stars": 2
+  },
+  "seed": 32309,
+  "version": "1.0.0"
+}

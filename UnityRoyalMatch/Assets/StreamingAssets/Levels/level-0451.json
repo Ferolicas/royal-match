@@ -1,0 +1,150 @@
+{
+  "levelNumber": 451,
+  "difficulty": 1,
+  "title": "The Blocked Path",
+  "description": "Difficulty: NORMAL | Realm: Mountain Realm",
+  "grid": {
+    "cols": 9,
+    "rows": 11
+  },
+  "moveLimit": 60,
+  "scoreStar1": 4800,
+  "scoreStar2": 7200,
+  "scoreStar3": 10560,
+  "objectives": [
+    {
+      "type": "remove_blocker",
+      "description": "Elimina obstáculos",
+      "target": 8
+    }
+  ],
+  "boardLayout": [
+    [
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "OBSTACLE_BOX",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_YELLOW"
+    ],
+    [
+      "GEM_GREEN",
+      "OBSTACLE_BOX",
+      "GEM_YELLOW",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_GREEN",
+      "GEM_RED",
+      "GEM_RED",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "OBSTACLE_CAGE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_GREEN"
+    ],
+    [
+      "GEM_YELLOW",
+      "GEM_BLUE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_GREEN",
+      "GEM_YELLOW",
+      "GEM_PURPLE"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_CYAN",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "OBSTACLE_BOX",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_RED"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_YELLOW",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_PURPLE",
+      "OBSTACLE_CAGE"
+    ],
+    [
+      "GEM_GREEN",
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_RED",
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_BLUE",
+      "GEM_CYAN"
+    ],
+    [
+      "GEM_BLUE",
+      "GEM_GREEN",
+      "GEM_PURPLE",
+      "GEM_PURPLE",
+      "GEM_BLUE",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_GREEN",
+      "OBSTACLE_CAGE"
+    ],
+    [
+      "GEM_PURPLE",
+      "GEM_CYAN",
+      "GEM_PURPLE",
+      "GEM_YELLOW",
+      "GEM_CYAN",
+      "GEM_RED",
+      "GEM_BLUE",
+      "GEM_RED",
+      "GEM_YELLOW"
+    ]
+  ],
+  "rewards": {
+    "coins": 10,
+    "stars": 1
+  },
+  "seed": 31761,
+  "version": "1.0.0"
+}

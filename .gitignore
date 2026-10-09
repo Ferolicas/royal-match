@@ -1,0 +1,17 @@
+# Unity-generated files and local builds
+UnityRoyalMatch/[Ll]ibrary/
+UnityRoyalMatch/[Tt]emp/
+UnityRoyalMatch/[Oo]bj/
+UnityRoyalMatch/[Ll]ogs/
+UnityRoyalMatch/[Uu]serSettings/
+UnityRoyalMatch/[Bb]uilds/
+UnityRoyalMatch/[Qq][Aa]/
+UnityRoyalMatch/*.csproj
+UnityRoyalMatch/*.sln
+UnityRoyalMatch/*.slnx
+UnityRoyalMatch/.vs/
+UnityRoyalMatch/.vscode/
+UnityRoyalMatch/mono_crash.*
+
+# Local diagnostic output
+*.log
