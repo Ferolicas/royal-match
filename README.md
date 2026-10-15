@@ -12,7 +12,7 @@ UNITY_EDITOR=/home/ferney_oliveros/Unity/Hub/Editor/6000.0.84f1/Editor/Unity
   -logFile /tmp/royal-web-build.log
 ```
 
-La salida es `UnityRoyalMatch/Builds/RoyalMatch_Web/`. La plantilla `Assets/WebGLTemplates/RoyalMobile` ocupa toda la pantalla y conserva las rutas relativas para el montaje de Caddy en `/royal/`. Caddy debe servir `Build/*.gz` con `Content-Encoding: gzip`, `*.wasm.gz` con `Content-Type: application/wasm` y `*.js.gz` con `Content-Type: application/javascript`. Los archivos de build se despliegan al directorio estático servido por Caddy; no se versionan en Git. La versión anterior se puede reconstruir desde el historial de `royal_match/` si hace falta revertir.
+La salida es `UnityRoyalMatch/Builds/RoyalMatch_Web/`. La plantilla `Assets/WebGLTemplates/RoyalMobile` ocupa toda la pantalla y conserva las rutas relativas para el montaje de Caddy en `/royal/`. Caddy debe servir `Build/*.gz` con `Content-Encoding: gzip`, `*.data.gz` con `Content-Type: application/octet-stream`, `*.wasm.gz` con `Content-Type: application/wasm` y `*.js.gz` con `Content-Type: application/javascript`. El despliegue comprueba estas cabeceras porque WebKit no descomprime correctamente los datos del juego si se entregan como `application/gzip`. Los archivos de build se despliegan al directorio estático servido por Caddy; no se versionan en Git. La versión anterior se puede reconstruir desde el historial de `royal_match/` si hace falta revertir.
 
 ## Publicación automática
 

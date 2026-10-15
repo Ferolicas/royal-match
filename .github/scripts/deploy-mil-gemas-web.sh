@@ -55,12 +55,35 @@ mv -Tf "$site_root/.dist-next" "$site_root/dist"
 
 served="$(curl --fail --silent --show-error --retry 4 --retry-delay 2 \
   --max-time 15 'https://olcas.app/royal/build-info.json' || true)"
-if [ "$served" != "{\"commit\":\"$release_sha\"}" ]; then
+headers_ok="$(python3 - "$release_sha" <<'PY'
+import sys
+from urllib.request import Request, urlopen
+
+release_sha = sys.argv[1]
+base = "https://olcas.app/royal/Build/RoyalMatch_Web."
+for filename, expected_type in (
+    ("data.gz", "application/octet-stream"),
+    ("wasm.gz", "application/wasm"),
+    ("framework.js.gz", "application/javascript"),
+):
+    request = Request(base + filename + "?v=" + release_sha, method="HEAD")
+    with urlopen(request, timeout=20) as response:
+        content_type = response.headers.get_content_type()
+        content_encoding = response.headers.get("Content-Encoding")
+        if content_type != expected_type or content_encoding != "gzip":
+            raise SystemExit(
+                f"Cabeceras WebGL incorrectas para {filename}: "
+                f"Content-Type={content_type}, Content-Encoding={content_encoding}"
+            )
+print("ok")
+PY
+)" || headers_ok=""
+if [ "$served" != "{\"commit\":\"$release_sha\"}" ] || [ "$headers_ok" != "ok" ]; then
   if [ -n "$current" ]; then
     ln -s "$current" "$site_root/.dist-rollback"
     mv -Tf "$site_root/.dist-rollback" "$site_root/dist"
   fi
-  echo "La publicación no se ve en /royal/; se restauró la versión anterior" >&2
+  echo "La publicación o sus cabeceras WebGL son incorrectas; se restauró la versión anterior" >&2
   exit 1
 fi
 echo "Publicado $release_sha en https://olcas.app/royal/"
