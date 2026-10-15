@@ -84,19 +84,25 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      // Replaced with the commit SHA during deployment. Keep every runtime file
+      // on the same release when a mobile browser has an older build cached.
+      var releaseVersion = "__RELEASE_SHA__";
+      function releaseUrl(path) {
+        return path + "?v=" + encodeURIComponent(releaseVersion);
+      }
+      var loaderUrl = releaseUrl(buildUrl + "/{{{ LOADER_FILENAME }}}");
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+        dataUrl: releaseUrl(buildUrl + "/{{{ DATA_FILENAME }}}"),
+        frameworkUrl: releaseUrl(buildUrl + "/{{{ FRAMEWORK_FILENAME }}}"),
 #if USE_THREADS
-        workerUrl: buildUrl + "/{{{ WORKER_FILENAME }}}",
+        workerUrl: releaseUrl(buildUrl + "/{{{ WORKER_FILENAME }}}"),
 #endif
 #if USE_WASM
-        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+        codeUrl: releaseUrl(buildUrl + "/{{{ CODE_FILENAME }}}"),
 #endif
 #if SYMBOLS_FILENAME
-        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+        symbolsUrl: releaseUrl(buildUrl + "/{{{ SYMBOLS_FILENAME }}}"),
 #endif
         streamingAssetsUrl: "StreamingAssets",
         companyName: {{{ JSON.stringify(COMPANY_NAME) }}},

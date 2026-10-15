@@ -11,6 +11,19 @@ build_dir="${GITHUB_WORKSPACE:?GITHUB_WORKSPACE no disponible}/UnityRoyalMatch/B
 test -s "$build_dir/index.html"
 test -s "$build_dir/Build/RoyalMatch_Web.wasm.gz"
 
+python3 - "$build_dir/index.html" "$release_sha" <<'PY'
+from pathlib import Path
+import sys
+
+index = Path(sys.argv[1])
+release_sha = sys.argv[2]
+html = index.read_text(encoding="utf-8")
+placeholder = '__RELEASE_SHA__'
+if html.count(placeholder) != 1:
+    raise SystemExit("El template WebGL debe incluir un único marcador de versión")
+index.write_text(html.replace(placeholder, release_sha), encoding="utf-8")
+PY
+
 release_base=/var/www/royal-match/releases
 release_dir="$release_base/$release_sha"
 site_root=/var/www/royal-match/royal_match
@@ -27,6 +40,7 @@ release_sha="$3"
 test -s "$release_dir/index.html"
 test -s "$release_dir/Build/RoyalMatch_Web.wasm.gz"
 grep -Fq "$release_sha" "$release_dir/build-info.json"
+grep -Fq "releaseVersion = \"$release_sha\"" "$release_dir/index.html"
 
 current=""
 if [ -L "$site_root/dist" ]; then
