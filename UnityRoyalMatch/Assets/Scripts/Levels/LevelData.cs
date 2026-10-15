@@ -94,6 +94,12 @@ namespace RoyalMatch.Levels
         [JsonProperty("moveLimit")]
         public int MoveLimit;
 
+        [JsonProperty("colorCount")]
+        public int ColorCount;
+
+        [JsonProperty("isBonus")]
+        public bool IsBonus;
+
         [JsonProperty("scoreStar1")]
         public int ScoreStar1;
 
@@ -123,12 +129,14 @@ namespace RoyalMatch.Levels
 
         public bool Validate()
         {
-            if (LevelNumber < 1 || LevelNumber > 1000) return false;
+            if (LevelNumber < 1 || LevelNumber > DifficultySystem.TotalLevels) return false;
             if (Grid == null) return false;
+            if (Grid.Cols < 3 || Grid.Rows < 3 || MoveLimit < 1) return false;
+            if (Objectives == null || Objectives.Length == 0) return false;
             if (BoardLayout == null || BoardLayout.Length != Grid.Rows) return false;
             if (ScoreStar1 > ScoreStar2 || ScoreStar2 > ScoreStar3) return false;
             foreach (string[] row in BoardLayout)
-                if (row.Length != Grid.Cols) return false;
+                if (row == null || row.Length != Grid.Cols) return false;
             return true;
         }
 
@@ -197,6 +205,6 @@ namespace RoyalMatch.Levels
 
     public static class LevelDataConstants
     {
-        public const string SchemaVersion = "1.0.0";
+        public const string SchemaVersion = "2.0.0";
     }
 }

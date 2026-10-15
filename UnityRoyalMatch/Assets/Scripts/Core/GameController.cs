@@ -3,6 +3,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using RoyalMatch.Core;
 using RoyalMatch.Rendering;
 using RoyalMatch.State;
@@ -11,6 +12,7 @@ using RoyalMatch.Match3;
 using RoyalMatch.Levels;
 using RoyalMatch.UI;
 using RoyalMatch.Audio;
+using RoyalMatch.Progress;
 
 namespace RoyalMatch.Core
 {
@@ -43,6 +45,7 @@ namespace RoyalMatch.Core
         private Point? _dragOrigin;
         private GemView _dragView;
         private Vector3 _dragViewOrigin;
+        private string _selectedBooster;
 
         #region Unity Lifecycle
 
@@ -127,6 +130,7 @@ namespace RoyalMatch.Core
             _isAnimating = false;
             _isGameStateAnimating = false;
             _isLevelLoaded = false;
+            _selectedBooster = null;
             _stateMachine.LoadLevel(levelNumber);
         }
 
@@ -172,6 +176,7 @@ namespace RoyalMatch.Core
 
         private void OnGameStateChanged(object sender, GameStateChangedArgs args)
         {
+            if (args.Status == GameStatus.WIN) _stateMachine.CommitOutcome();
             if (Hud != null)
                 Hud.UpdateDisplay(_stateMachine.CurrentState);
             Character?.SetMoves(_stateMachine.CurrentState.MovesRemaining);
@@ -203,7 +208,7 @@ namespace RoyalMatch.Core
             if (args.Status == GameStatus.WIN)
             {
                 var stars = GameState.GetStarsEarned(_stateMachine.CurrentState);
-                _stateMachine.SetLevelStars(args.LevelNumber, stars);
+                _stateMachine.CommitOutcome();
                 if (GameOverPanel != null)
                     GameOverPanel.ShowWin(stars, args.LevelNumber);
                 Character?.CelebrateVictory();
@@ -231,6 +236,29 @@ namespace RoyalMatch.Core
                 _stateMachine.GameManagerInstance.GetBoard());
             BoardView.Render(engineState);
         }
+
+        public bool ContinueWithCoins()
+        {
+            if (!_stateMachine.TryBuyExtraMoves()) return false;
+            GameOverPanel?.Hide();
+            GameSceneManager.Instance?.TransitionTo(ScreenState.Playing);
+            Character?.SetMoves(_stateMachine.CurrentState.MovesRemaining);
+            return true;
+        }
+
+        public bool ChooseBooster(string id)
+        {
+            if (!_isLevelLoaded || _stateMachine.CurrentState?.Status != GameStatus.WAITING_INPUT)
+                return false;
+            int cost = id == "hammer" ? 300 : id == "jester" ? 500 : 400;
+            if (PlayerProgress.GetBoosterCount(id) == 0 && !PlayerProgress.TryBuyBooster(id, cost))
+                return false;
+            if (id == "jester") return _stateMachine.TryUseBooster(id, 0, 0);
+            _selectedBooster = _selectedBooster == id ? null : id;
+            return true;
+        }
+
+        public string SelectedBooster => _selectedBooster;
 
         private void HandleMatchReaction(int matchedCount)
         {
@@ -272,6 +300,9 @@ namespace RoyalMatch.Core
 
             if (mouseDown)
             {
+                if (EventSystem.current != null &&
+                    EventSystem.current.IsPointerOverGameObject(touch.HasValue ? touch.Value.fingerId : -1))
+                    return;
                 Ray ray = Camera.main.ScreenPointToRay(screenPos);
                 if (Physics.Raycast(ray, out RaycastHit hit, 100f, BoardLayerMask))
                 {
@@ -281,6 +312,12 @@ namespace RoyalMatch.Core
 
                     if (row >= 0 && row < BoardView.GridRows && col >= 0 && col < BoardView.GridCols)
                     {
+                        if (_selectedBooster != null)
+                        {
+                            if (_stateMachine.TryUseBooster(_selectedBooster, row, col))
+                                _selectedBooster = null;
+                            return;
+                        }
                         _dragStartScreen = screenPos;
                         _isDragging = true;
                         _dragOrigin = new Point(row, col);

@@ -23,17 +23,99 @@ namespace RoyalMatch.Core
             {
                 Rows = state.GridRows,
                 Cols = state.GridCols,
-                GemTypes = 6,
+                GemTypes = state.GemTypes > 0 ? state.GemTypes : 6,
                 MinMatch = 3,
             });
             _animationSteps = new List<AnimationStep>();
             _animationIdCounter = 0;
             _board.InitializeFromLayout(state.BoardLayout);
+            if (state.StarterSpecials != null)
+            {
+                int placed = 0;
+                for (int r = 0; r < state.GridRows && placed < state.StarterSpecials.Count; r++)
+                    for (int c = 0; c < state.GridCols && placed < state.StarterSpecials.Count; c++)
+                        if (_board.GetPiece(r, c) != null && (r * state.GridCols + c) % 13 == 6)
+                            _board.SetSpecial(r, c, state.StarterSpecials[placed++]);
+            }
         }
 
         public GameStateData GetState() => _state;
         public Board GetBoard() => _board;
         public List<AnimationStep> GetAnimationSteps() => _animationSteps;
+
+        public bool TryUseBooster(string id, int row, int col)
+        {
+            if (_state.Status != GameStatus.WAITING_INPUT) return false;
+            if (id == "jester")
+            {
+                var shuffled = _board.ShufflePieces();
+                if (shuffled.Count == 0) return false;
+                _animationSteps = new List<AnimationStep>();
+                var command = new AnimationCommand(NextAnimationId(), AnimationType.MOVE, 300f, 0f,
+                    MapPointsToTargets(shuffled.ConvertAll(move => move.To)));
+                command.Moves = shuffled;
+                _animationSteps.Add(new AnimationStep(command, 300f));
+                return true;
+            }
+            if (row < 0 || row >= _board.Config.Rows || col < 0 || col >= _board.Config.Cols)
+                return false;
+            var targets = new List<Point>();
+            if (id == "hammer") targets.Add(new Point(row, col));
+            else if (id == "arrow")
+                for (int c = 0; c < _board.Config.Cols; c++) targets.Add(new Point(row, c));
+            else if (id == "cannon")
+                for (int r = 0; r < _board.Config.Rows; r++) targets.Add(new Point(r, col));
+            else return false;
+
+            bool useful = false;
+            foreach (var point in targets)
+            {
+                var cell = _board.Grid.GetCell(point.Row, point.Col);
+                if (_board.GetPiece(point.Row, point.Col) != null ||
+                    (cell != null && CellContentExtensions.IsObstacle(cell.Content))) useful = true;
+            }
+            if (!useful) return false;
+
+            _board.DestroyedThisTurn.Clear();
+            _animationSteps = new List<AnimationStep>();
+            var colors = new Dictionary<string, int>();
+            foreach (var point in targets)
+            {
+                var piece = _board.GetPiece(point.Row, point.Col);
+                if (piece == null) continue;
+                string key = piece.Color.ToString();
+                colors[key] = colors.TryGetValue(key, out var count) ? count + 1 : 1;
+            }
+            var destroyed = _board.ClearPositions(targets);
+            var hits = new List<ObstacleHit>();
+            var blockers = _board.DamageAdjacentObstacles(destroyed, hits, targets);
+            UpdateObjectives(colors, blockers.Count, 0);
+            if (destroyed.Count > 0)
+                _animationSteps.Add(new AnimationStep(new AnimationCommand(NextAnimationId(),
+                    AnimationType.DESTROY, 180f, 0f, MapPointsToTargets(destroyed)), 180f));
+            QueueObstacleHits(hits, 0f);
+            var moves = new List<GemMove>();
+            var moved = _board.ApplyGravity(moves);
+            if (moved.Count > 0)
+            {
+                var command = new AnimationCommand(NextAnimationId(), AnimationType.MOVE, 220f, 180f,
+                    MapPointsToTargets(moved));
+                command.Moves = moves;
+                _animationSteps.Add(new AnimationStep(command, 220f));
+            }
+            var spawned = _board.FillFromTop();
+            if (spawned.Count > 0)
+            {
+                var command = new AnimationCommand(NextAnimationId(), AnimationType.SPAWN, 220f, 400f,
+                    MapPointsToTargets(spawned));
+                command.Appearances = CaptureAppearances(spawned);
+                _animationSteps.Add(new AnimationStep(command, 220f));
+            }
+            var cascade = _board.FindMatches();
+            if (cascade.matches.Count > 0) ProcessMatches(cascade.matches, cascade.specials, 2);
+            else CheckGameOver();
+            return true;
+        }
 
         private string NextAnimationId()
         {
@@ -90,9 +172,19 @@ namespace RoyalMatch.Core
 
         private void ProcessSpecialSwap(Piece first, Piece second)
         {
+            if (first.Special != SpecialType.NONE && second.Special != SpecialType.NONE)
+                _state.CombosMade++;
             _animationSteps = new List<AnimationStep>();
             var flights = new List<GemMove>();
             var affected = SpecialComboResolver.Resolve(_board, first, second, flights);
+            if (_state.SuperLightBallActive &&
+                (first.Special == SpecialType.COLOR_BOMB || second.Special == SpecialType.COLOR_BOMB))
+            {
+                var primary = first.Special == SpecialType.COLOR_BOMB ? second.Color : first.Color;
+                var extra = (PieceType)(((int)primary + 1) % _board.Config.GemTypes);
+                foreach (var point in SpecialAbilities.ResolveColorBomb(_board.ToSerializedBoard(), extra.ToString()))
+                    affected.Add(point);
+            }
             int specialScore = 120 + affected.Count * 10;
 
             // Deduplicate affected points
@@ -266,6 +358,11 @@ namespace RoyalMatch.Core
 
                 if (special != SpecialType.NONE && occupiedSpecialPositions.Add(position))
                 {
+                    if (special == SpecialType.ROCKET_HORIZONTAL || special == SpecialType.ROCKET_VERTICAL)
+                        _state.RocketsCreated++;
+                    else if (special == SpecialType.BOMB) _state.TntCreated++;
+                    else if (special == SpecialType.PROPELLER) _state.PropellersCreated++;
+                    else if (special == SpecialType.COLOR_BOMB) _state.LightballsCreated++;
                     _board.SetPiece(position.Row, position.Col,
                         new Piece(candidateColor(candidate.Color), special, position.Row, position.Col));
                     createdSpecials.Add(position);
@@ -458,12 +555,25 @@ namespace RoyalMatch.Core
             {
                 _state.Status = GameStatus.WIN;
             }
-            else if (_state.MovesRemaining <= 0 || !_board.HasValidMove())
+            else if (_state.MovesRemaining <= 0)
             {
                 _state.Status = GameStatus.LOSE;
             }
             else
             {
+                if (!_board.HasValidMove())
+                {
+                    var shuffled = _board.ShufflePieces();
+                    if (shuffled.Count == 0)
+                    {
+                        _state.Status = GameStatus.LOSE;
+                        return;
+                    }
+                    var command = new AnimationCommand(NextAnimationId(), AnimationType.MOVE, 300f, 0f,
+                        MapPointsToTargets(shuffled.ConvertAll(move => move.To)));
+                    command.Moves = shuffled;
+                    _animationSteps.Add(new AnimationStep(command, 300f));
+                }
                 _state.Status = GameStatus.WAITING_INPUT;
             }
         }

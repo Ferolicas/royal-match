@@ -9,19 +9,46 @@ namespace RoyalMatch.Tests
 {
     public class PremiumGameplayTests
     {
-        [TestCase(1, 72, 4)]
-        [TestCase(3, 52, 16)]
-        [TestCase(6, 44, 24)]
+        [TestCase(1, Difficulty.EASY)]
+        [TestCase(3, Difficulty.NORMAL)]
+        [TestCase(39, Difficulty.HARD)]
+        [TestCase(49, Difficulty.HARD)]
+        [TestCase(59, Difficulty.SUPER_HARD)]
+        [TestCase(65, Difficulty.HARD)]
+        [TestCase(14700, Difficulty.NORMAL)]
+        public void DifficultyScheduleAndGeneratedBoardRemainPlayable(int levelNumber,
+            Difficulty expected)
+        {
+            var level = LevelGenerator.GenerateLevel(levelNumber);
+            Assert.That(level.Difficulty, Is.EqualTo(expected));
+            Assert.That(level.Validate(), Is.True);
+            Assert.That(level.MoveLimit, Is.InRange(18, 35));
+            var board = new Board(new BoardConfig
+            {
+                Rows = level.Grid.Rows, Cols = level.Grid.Cols,
+                GemTypes = level.ColorCount, MinMatch = 3,
+            });
+            board.InitializeFromLayout(level.BoardLayout);
+            Assert.That(board.FindMatches().matches, Is.Empty);
+            Assert.That(board.HasValidMove(), Is.True);
+        }
+
+        [TestCase(1, 3, 1)]
+        [TestCase(3, 5, 1)]
+        [TestCase(6, 5, 2)]
         public void GeneratedLevelsUseTallBoardAndClearAllObstacles(int levelNumber,
-            int moves, int blockers)
+            int blockers, int goals)
         {
             var level = LevelGenerator.GenerateLevel(levelNumber);
             Assert.That(level.Grid.Cols, Is.EqualTo(9));
             Assert.That(level.Grid.Rows, Is.EqualTo(11));
-            Assert.That(level.MoveLimit, Is.EqualTo(moves));
-            Assert.That(level.Objectives.Length, Is.EqualTo(1));
+            Assert.That(level.MoveLimit, Is.InRange(18, 35));
+            Assert.That(level.ColorCount, Is.EqualTo(4));
+            Assert.That(level.Objectives.Length, Is.EqualTo(goals));
             Assert.That(level.Objectives[0].Type, Is.EqualTo("remove_blocker"));
             Assert.That(level.Objectives[0].Target, Is.EqualTo(blockers));
+            if (goals == 2)
+                Assert.That(level.Objectives[1].Type, Is.EqualTo("collect_color"));
             int actual = 0;
             foreach (var row in level.BoardLayout)
                 foreach (var cell in row)

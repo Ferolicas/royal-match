@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using RoyalMatch.Data;
 using RoyalMatch.UI;
+using RoyalMatch.Core;
 
 namespace RoyalMatch.Rendering
 {
@@ -52,6 +53,8 @@ namespace RoyalMatch.Rendering
                 NextLevelButton.onClick.RemoveAllListeners();
                 NextLevelButton.onClick.AddListener(OnNextLevel);
                 NextLevelButton.gameObject.SetActive(true);
+                var label = NextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (label != null) label.text = "CONTINUAR";
             }
             if (RetryButton != null)
             {
@@ -64,8 +67,6 @@ namespace RoyalMatch.Rendering
                 MainMenuButton.onClick.AddListener(OnMainMenu);
             }
 
-            // Store stars
-            GameSceneManager.Instance?.SetLevelStars(levelNumber, stars);
         }
 
         public void ShowLose(int levelNumber)
@@ -80,7 +81,14 @@ namespace RoyalMatch.Rendering
             ClearStars();
 
             if (RewardLabel != null) RewardLabel.text = $"Nivel {levelNumber}  •  Vuelve a intentarlo";
-            if (NextLevelButton != null) NextLevelButton.gameObject.SetActive(false);
+            if (NextLevelButton != null)
+            {
+                NextLevelButton.gameObject.SetActive(true);
+                NextLevelButton.onClick.RemoveAllListeners();
+                NextLevelButton.onClick.AddListener(OnContinue);
+                var label = NextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (label != null) label.text = "+5 MOV. · 900";
+            }
             if (RetryButton != null)
             {
                 RetryButton.onClick.RemoveAllListeners();
@@ -129,19 +137,25 @@ namespace RoyalMatch.Rendering
         private void ConfigureOutcomeLayout(bool won)
         {
             if (CardRoot != null)
-                CardRoot.sizeDelta = new Vector2(535f, won ? 505f : 440f);
+                CardRoot.sizeDelta = new Vector2(535f, won ? 505f : 560f);
             if (GuardianCrest != null)
                 GuardianCrest.rectTransform.anchoredPosition = new Vector2(0f, won ? 154f : 126f);
             if (TitleLabel != null)
                 TitleLabel.rectTransform.anchoredPosition = new Vector2(0f, won ? 67f : 36f);
             if (StarsContainer != null)
                 StarsContainer.gameObject.SetActive(won);
+            if (!won && NextLevelButton != null)
+            {
+                var rect = NextLevelButton.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(0f, -95f);
+                rect.sizeDelta = new Vector2(360f, 65f);
+            }
             if (RewardLabel != null)
                 RewardLabel.rectTransform.anchoredPosition = new Vector2(0f, won ? -60f : -36f);
             if (RetryButton != null)
             {
                 var rect = RetryButton.GetComponent<RectTransform>();
-                rect.anchoredPosition = won ? new Vector2(-104f, -206f) : new Vector2(0f, -102f);
+                rect.anchoredPosition = won ? new Vector2(-104f, -206f) : new Vector2(0f, -170f);
                 rect.sizeDelta = won ? new Vector2(195f, 51f) : new Vector2(360f, 70f);
                 RetryButton.GetComponent<Image>().color = won
                     ? new Color(0.41f, 0.22f, 0.69f) : new Color(1f, 0.76f, 0.24f);
@@ -152,7 +166,7 @@ namespace RoyalMatch.Rendering
             if (MainMenuButton != null)
             {
                 var rect = MainMenuButton.GetComponent<RectTransform>();
-                rect.anchoredPosition = won ? new Vector2(104f, -206f) : new Vector2(0f, -172f);
+                rect.anchoredPosition = won ? new Vector2(104f, -206f) : new Vector2(0f, -235f);
                 rect.sizeDelta = won ? new Vector2(195f, 51f) : new Vector2(220f, 50f);
             }
         }
@@ -174,6 +188,13 @@ namespace RoyalMatch.Rendering
         {
             Hide();
             GameSceneManager.Instance?.RetryLevel();
+        }
+
+        private void OnContinue()
+        {
+            var controller = FindFirstObjectByType<GameController>();
+            if (controller != null && controller.ContinueWithCoins()) Hide();
+            else if (RewardLabel != null) RewardLabel.text = "No tienes monedas suficientes";
         }
 
         private void OnMainMenu()

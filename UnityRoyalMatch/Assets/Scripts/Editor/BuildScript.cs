@@ -41,7 +41,7 @@ namespace RoyalMatch.EditorTools
 
             // Configure player settings
             PlayerSettings.companyName = "Olcas";
-            PlayerSettings.productName = "Royal Match Clone";
+            PlayerSettings.productName = "Mil Gemas";
             PlayerSettings.runInBackground = true;
             PlayerSettings.defaultIsNativeResolution = true;
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;

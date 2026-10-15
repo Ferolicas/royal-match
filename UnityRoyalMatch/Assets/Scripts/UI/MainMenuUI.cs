@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using RoyalMatch.Audio;
+using RoyalMatch.Progress;
 
 namespace RoyalMatch.UI
 {
@@ -59,8 +60,7 @@ namespace RoyalMatch.UI
         private void OnPlay()
         {
             GameAudioManager.Instance?.PlayUi();
-            // Play the first unlocked level or level 1
-            GameSceneManager.Instance?.StartLevel(1);
+            GameSceneManager.Instance?.StartLevel(PlayerProgress.CurrentLevel);
         }
 
         private void OnSettings()

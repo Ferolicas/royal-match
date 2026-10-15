@@ -40,13 +40,9 @@ namespace RoyalMatch.Match3
             Pieces = new Piece[Config.Rows, Config.Cols];
             DestroyedThisTurn = new List<Point>();
 
-            _colors = new PieceType[(int)PieceType.CYAN + 1];
-            _colors[0] = PieceType.RED;
-            _colors[1] = PieceType.BLUE;
-            _colors[2] = PieceType.GREEN;
-            _colors[3] = PieceType.YELLOW;
-            _colors[4] = PieceType.PURPLE;
-            _colors[5] = PieceType.CYAN;
+            _colors = new PieceType[System.Math.Clamp(Config.GemTypes, 2, (int)PieceType.CYAN + 1)];
+            var palette = PieceTypeExtensions.AllTypes;
+            for (int i = 0; i < _colors.Length; i++) _colors[i] = palette[i];
             _nextColorIndex = 0;
         }
 
@@ -417,6 +413,46 @@ namespace RoyalMatch.Match3
             var color = _colors[_nextColorIndex % _colors.Length];
             _nextColorIndex = (_nextColorIndex + 1) % _colors.Length;
             return color;
+        }
+
+        public List<GemMove> ShufflePieces()
+        {
+            var positions = new List<Point>();
+            var originals = new List<Piece>();
+            for (int r = 0; r < Config.Rows; r++)
+                for (int c = 0; c < Config.Cols; c++)
+                    if (Pieces[r, c] != null)
+                    {
+                        positions.Add(new Point(r, c));
+                        originals.Add(Pieces[r, c]);
+                    }
+
+            if (positions.Count < 2) return new List<GemMove>();
+            var shuffled = new List<Piece>(originals);
+            var random = new System.Random(System.Environment.TickCount);
+            for (int attempt = 0; attempt < 100; attempt++)
+            {
+                for (int i = shuffled.Count - 1; i > 0; i--)
+                {
+                    int j = random.Next(i + 1);
+                    (shuffled[i], shuffled[j]) = (shuffled[j], shuffled[i]);
+                }
+                for (int i = 0; i < positions.Count; i++)
+                    SetPiece(positions[i].Row, positions[i].Col, shuffled[i]);
+                if (FindMatches().matches.Count == 0 && HasValidMove())
+                {
+                    var moves = new List<GemMove>();
+                    for (int i = 0; i < positions.Count; i++)
+                    {
+                        int oldIndex = originals.IndexOf(shuffled[i]);
+                        if (oldIndex != i) moves.Add(new GemMove(positions[oldIndex], positions[i]));
+                    }
+                    return moves;
+                }
+            }
+            for (int i = 0; i < positions.Count; i++)
+                SetPiece(positions[i].Row, positions[i].Col, originals[i]);
+            return new List<GemMove>();
         }
 
         public Board Clone()

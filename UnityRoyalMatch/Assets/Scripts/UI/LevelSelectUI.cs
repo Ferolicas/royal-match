@@ -7,6 +7,7 @@ using TMPro;
 
 using RoyalMatch.Types;
 using RoyalMatch.Levels;
+using RoyalMatch.Progress;
 
 namespace RoyalMatch.UI
 {
@@ -20,16 +21,53 @@ namespace RoyalMatch.UI
 
         [Header("Worlds")]
         public WorldTab[] WorldTabs;
+        private const int PageSize = 20;
+        private int _pageIndex;
+        private Button _previousPage;
+        private Button _nextPage;
+
+        private void OnEnable()
+        {
+            _pageIndex = (PlayerProgress.CurrentLevel - 1) / PageSize;
+            BuildLevelGrid();
+        }
 
         private void Start()
         {
+            if (TitleLabel == null)
+            {
+                foreach (var label in GetComponentsInChildren<TextMeshProUGUI>(true))
+                    if (label.name == "TitleLabel") { TitleLabel = label; break; }
+            }
             if (BackButton != null)
                 BackButton.onClick.AddListener(OnBack);
 
             if (TitleLabel != null)
                 TitleLabel.text = "SELECT LEVEL";
 
+            if (BackButton != null)
+            {
+                _previousPage = CreateNavigationButton("PreviousPage", "ANTERIORES", -150f, -270f,
+                    () => { _pageIndex--; BuildLevelGrid(); });
+                _nextPage = CreateNavigationButton("NextPage", "SIGUIENTES", 150f, -270f,
+                    () => { _pageIndex++; BuildLevelGrid(); });
+            }
             BuildLevelGrid();
+        }
+
+        private Button CreateNavigationButton(string name, string label, float x, float y, UnityEngine.Events.UnityAction action)
+        {
+            var obj = Instantiate(BackButton.gameObject, BackButton.transform.parent);
+            obj.name = name;
+            var rect = obj.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector2(x, y);
+            rect.sizeDelta = new Vector2(180f, 42f);
+            var button = obj.GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(action);
+            var text = obj.GetComponentInChildren<TextMeshProUGUI>();
+            if (text != null) text.text = label;
+            return button;
         }
 
         private void BuildLevelGrid()
@@ -41,13 +79,20 @@ namespace RoyalMatch.UI
                 Destroy(child.gameObject);
 
             // Use a simple grid layout
-            var grid = ContentParent.gameObject.AddComponent<GridLayoutGroup>();
-            grid.cellSize = new Vector2(100, 100);
+            var grid = ContentParent.GetComponent<GridLayoutGroup>() ??
+                ContentParent.gameObject.AddComponent<GridLayoutGroup>();
+            grid.cellSize = new Vector2(88, 88);
             grid.spacing = new Vector2(10, 10);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 5;
 
-            for (int level = 1; level <= 100; level++) // Show first 100 levels
+            int firstVisible = _pageIndex * PageSize + 1;
+            int lastVisible = System.Math.Min(DifficultySystem.TotalLevels, firstVisible + PageSize - 1);
+            if (TitleLabel != null) TitleLabel.text = $"NIVELES {firstVisible}-{lastVisible}";
+            if (_previousPage != null) _previousPage.interactable = _pageIndex > 0;
+            if (_nextPage != null) _nextPage.interactable = lastVisible < DifficultySystem.TotalLevels &&
+                lastVisible < PlayerProgress.CurrentLevel;
+            for (int level = firstVisible; level <= lastVisible; level++)
             {
                 var buttonObj = Instantiate(LevelButtonPrefab, ContentParent);
                 var button = buttonObj.GetComponent<LevelSelectButton>();
@@ -64,13 +109,12 @@ namespace RoyalMatch.UI
 
         private bool IsLevelUnlocked(int levelNumber)
         {
-            if (levelNumber == 1) return true;
-            return GetLevelStars(levelNumber - 1) > 0;
+            return PlayerProgress.IsUnlocked(levelNumber);
         }
 
         private int GetLevelStars(int levelNumber)
         {
-            return PlayerPrefs.GetInt($"level_{levelNumber}_stars", 0);
+            return PlayerProgress.GetLevelStars(levelNumber);
         }
 
         private void OnBack()

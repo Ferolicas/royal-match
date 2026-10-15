@@ -7,21 +7,21 @@ namespace RoyalMatch.Levels
 {
     public static class DifficultySystem
     {
-        public const int TotalLevels = 1000;
+        public const int TotalLevels = 14700;
         public const int SeedBase = 0x7a4e;
         public const int LevelsPerFolder = 100;
         public const int GridCols = 9;
         public const int GridRows = 11;
         public const int GemTypesCount = 6;
 
-        public const int BaseMoveLimit = 15;
-        public const int MinMoveLimit = 6;
+        public const int MinMoveLimit = 18;
 
         public static Difficulty GetDifficulty(int levelNumber)
         {
             if (levelNumber <= 2) return Difficulty.EASY;
-            if (levelNumber % 6 == 0) return Difficulty.SUPER_HARD;
-            if (levelNumber % 3 == 0) return Difficulty.HARD;
+            if (levelNumber == 39 || levelNumber == 49) return Difficulty.HARD;
+            if (levelNumber >= 39 && levelNumber % 10 == 5) return Difficulty.HARD;
+            if (levelNumber >= 39 && levelNumber % 10 == 9) return Difficulty.SUPER_HARD;
             return Difficulty.NORMAL;
         }
 
@@ -32,17 +32,17 @@ namespace RoyalMatch.Levels
 
         public static int ComputeMoveLimit(int levelNumber)
         {
-            var diff = GetDifficulty(levelNumber);
-            int offset = diff switch
+            int baseline = levelNumber <= 100 ? 25 : levelNumber <= 1000 ? 26 :
+                levelNumber <= 5000 ? 25 : levelNumber <= 10000 ? 24 : 23;
+            int variation = ((GetSeed(levelNumber) * 17) % 7) - 3;
+            int allowance = GetDifficulty(levelNumber) switch
             {
-                Difficulty.EASY => 3,
-                Difficulty.NORMAL => 0,
-                Difficulty.HARD => -2,
-                Difficulty.SUPER_HARD => -4,
+                Difficulty.EASY => 5,
+                Difficulty.HARD => 1,
+                Difficulty.SUPER_HARD => 2,
                 _ => 0,
             };
-            int moves = BaseMoveLimit + offset;
-            return System.Math.Max(MinMoveLimit, moves) * 4;
+            return System.Math.Clamp(baseline + variation + allowance, MinMoveLimit, 35);
         }
 
         public static float GetGoalTargetMultiplier(Difficulty diff)
@@ -73,10 +73,10 @@ namespace RoyalMatch.Levels
         {
             return diff switch
             {
-                Difficulty.EASY => 4,
-                Difficulty.NORMAL => 8,
-                Difficulty.HARD => 16,
-                Difficulty.SUPER_HARD => 24,
+                Difficulty.EASY => 3,
+                Difficulty.NORMAL => 5,
+                Difficulty.HARD => 8,
+                Difficulty.SUPER_HARD => 12,
                 _ => 0,
             };
         }
@@ -103,10 +103,10 @@ namespace RoyalMatch.Levels
         {
             return diff switch
             {
-                Difficulty.EASY => 3,
+                Difficulty.EASY => 5,
                 Difficulty.NORMAL => 0,
-                Difficulty.HARD => -2,
-                Difficulty.SUPER_HARD => -4,
+                Difficulty.HARD => 1,
+                Difficulty.SUPER_HARD => 2,
                 _ => 0,
             };
         }

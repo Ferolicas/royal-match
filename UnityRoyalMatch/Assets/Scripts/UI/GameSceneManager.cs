@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using RoyalMatch.Audio;
+using RoyalMatch.Progress;
+using RoyalMatch.Levels;
+using RoyalMatch.State;
+using RoyalMatch.Commerce;
 
 namespace RoyalMatch.UI
 {
@@ -43,6 +47,7 @@ namespace RoyalMatch.UI
         public float SplashDuration = 0.8f;
 
         public event Action<int> OnLevelStartRequested;
+        public event Action<string> OnLevelStartDenied;
 
         private void Awake()
         {
@@ -59,6 +64,8 @@ namespace RoyalMatch.UI
         {
             Debug.Log("GameSceneManager.Start: Setting up screens...");
             SetupScreens();
+            if (GetComponent<IapStoreBridge>() == null) gameObject.AddComponent<IapStoreBridge>();
+            if (GetComponent<MetaEconomyUI>() == null) gameObject.AddComponent<MetaEconomyUI>();
             Debug.Log($"GameSceneManager.Start: Transitioning to {ScreenState.Splash}");
             TransitionTo(ScreenState.Splash);
             StartCoroutine(AutoStartForQualityCheck());
@@ -145,6 +152,7 @@ namespace RoyalMatch.UI
         // Public API for UI buttons
         public void LoadMenuScene()
         {
+            FindFirstObjectByType<GameStateMachine>()?.CommitAbandonment();
             TransitionTo(ScreenState.MainMenu);
         }
 
@@ -155,6 +163,13 @@ namespace RoyalMatch.UI
 
         public void StartLevel(int levelNumber)
         {
+            FindFirstObjectByType<GameStateMachine>()?.CommitAbandonment();
+            if (!PlayerProgress.CanStart(levelNumber))
+            {
+                OnLevelStartDenied?.Invoke(PlayerProgress.IsUnlocked(levelNumber) ?
+                    "Sin vidas. Espera o recárgalas con monedas." : "Nivel bloqueado.");
+                return;
+            }
             CurrentLevel = levelNumber;
             OnLevelStartRequested?.Invoke(levelNumber);
             TransitionTo(ScreenState.Playing);
@@ -162,34 +177,15 @@ namespace RoyalMatch.UI
 
         public void RetryLevel()
         {
-            OnLevelStartRequested?.Invoke(CurrentLevel);
-            TransitionTo(ScreenState.Playing);
+            StartLevel(CurrentLevel);
         }
 
         public void NextLevel()
         {
-            CurrentLevel++;
-            OnLevelStartRequested?.Invoke(CurrentLevel);
-            TransitionTo(ScreenState.Playing);
+            StartLevel(Math.Min(CurrentLevel + 1, DifficultySystem.TotalLevels));
         }
 
-        public bool CanStartLevel(int levelNumber)
-        {
-            if (levelNumber == 1) return true;
-            return GetLevelStars(levelNumber - 1) > 0;
-        }
-
-        public int GetLevelStars(int levelNumber)
-        {
-            return PlayerPrefs.GetInt($"level_{levelNumber}_stars", 0);
-        }
-
-        public void SetLevelStars(int levelNumber, int stars)
-        {
-            string key = $"level_{levelNumber}_stars";
-            int previous = PlayerPrefs.GetInt(key, 0);
-            PlayerPrefs.SetInt(key, Math.Max(previous, stars));
-            PlayerPrefs.Save();
-        }
+        public bool CanStartLevel(int levelNumber) => PlayerProgress.CanStart(levelNumber);
+        public int GetLevelStars(int levelNumber) => PlayerProgress.GetLevelStars(levelNumber);
     }
 }

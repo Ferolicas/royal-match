@@ -1,0 +1,78 @@
+name: Publicar Mil Gemas web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/mil-gemas-web.yml
+      - .github/scripts/deploy-mil-gemas-web.sh
+      - UnityRoyalMatch/Assets/**
+      - UnityRoyalMatch/Packages/**
+      - UnityRoyalMatch/ProjectSettings/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mil-gemas-web-production
+  cancel-in-progress: false
+
+jobs:
+  build-test-deploy:
+    runs-on: [self-hosted, Linux, X64, milgemas-unity]
+    timeout-minutes: 45
+    env:
+      UNITY_EDITOR: /home/ferney_oliveros/Unity/Hub/Editor/6000.0.84f1/Editor/Unity
+      UNITY_PROJECT: ${{ github.workspace }}/UnityRoyalMatch
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Comprobar Unity y SSH
+        run: |
+          test -x "$UNITY_EDITOR"
+          ssh -o BatchMode=yes -o ConnectTimeout=10 vps true
+
+      - name: Ejecutar pruebas EditMode
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics \
+            -projectPath "$UNITY_PROJECT" \
+            -runTests -testPlatform EditMode \
+            -testResults "$RUNNER_TEMP/mil-gemas-tests.xml" \
+            -logFile "$RUNNER_TEMP/mil-gemas-tests.log"
+          python3 - "$RUNNER_TEMP/mil-gemas-tests.xml" <<'PY'
+          import sys
+          import xml.etree.ElementTree as ET
+          result = ET.parse(sys.argv[1]).getroot()
+          assert result.get('failed') == '0', result.attrib
+          assert int(result.get('passed', '0')) > 0, result.attrib
+          print('Pruebas:', result.get('passed'), 'aprobadas')
+          PY
+
+      - name: Construir WebGL
+        working-directory: UnityRoyalMatch
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics -quit \
+            -projectPath "$UNITY_PROJECT" \
+            -executeMethod RoyalMatch.EditorTools.BuildScript.BuildWeb \
+            -logFile "$RUNNER_TEMP/mil-gemas-web-build.log"
+          grep -q 'Web build succeeded:' "$RUNNER_TEMP/mil-gemas-web-build.log"
+          test -s Builds/RoyalMatch_Web/index.html
+          test -s Builds/RoyalMatch_Web/Build/RoyalMatch_Web.wasm.gz
+
+      - name: Publicar en olcas.app/royal
+        run: bash .github/scripts/deploy-mil-gemas-web.sh
+
+      - name: Guardar logs si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mil-gemas-build-logs
+          path: |
+            ${{ runner.temp }}/mil-gemas-tests.log
+            ${{ runner.temp }}/mil-gemas-tests.xml
+            ${{ runner.temp }}/mil-gemas-web-build.log
+          if-no-files-found: ignore

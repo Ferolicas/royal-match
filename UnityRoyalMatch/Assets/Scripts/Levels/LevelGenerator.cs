@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using RoyalMatch.Types;
 using RoyalMatch.Utils;
@@ -19,10 +20,10 @@ namespace RoyalMatch.Levels
 
         private static readonly Dictionary<Difficulty, ObstacleSpec> ObstacleSpecs = new Dictionary<Difficulty, ObstacleSpec>
         {
-            { Difficulty.EASY, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX" }, BlockerCount = 4 } },
-            { Difficulty.NORMAL, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE" }, BlockerCount = 8 } },
-            { Difficulty.HARD, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE", "OBSTACLE_ICE" }, BlockerCount = 16 } },
-            { Difficulty.SUPER_HARD, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE", "OBSTACLE_ICE", "OBSTACLE_STONE" }, BlockerCount = 24 } },
+            { Difficulty.EASY, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX" }, BlockerCount = 3 } },
+            { Difficulty.NORMAL, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE" }, BlockerCount = 5 } },
+            { Difficulty.HARD, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE", "OBSTACLE_ICE" }, BlockerCount = 8 } },
+            { Difficulty.SUPER_HARD, new ObstacleSpec { Types = new[] { "OBSTACLE_BOX", "OBSTACLE_CAGE", "OBSTACLE_ICE", "OBSTACLE_STONE" }, BlockerCount = 12 } },
         };
 
         private static string[][] CreateEmptyBoard(int rows, int cols)
@@ -111,7 +112,7 @@ namespace RoyalMatch.Levels
             return false;
         }
 
-        private static void FillGems(string[][] board, DeterministicRNG rng, int rows, int cols)
+        private static void FillGems(string[][] board, DeterministicRNG rng, int rows, int cols, int colorCount)
         {
             var gemCells = new List<(int r, int c)>();
             for (int r = 0; r < rows; r++)
@@ -119,7 +120,8 @@ namespace RoyalMatch.Levels
                     if (board[r][c] == "EMPTY")
                         gemCells.Add((r, c));
 
-            var gemTypes = PieceTypeExtensions.AllTypes;
+            var gemTypes = new PieceType[colorCount];
+            Array.Copy(PieceTypeExtensions.AllTypes, gemTypes, colorCount);
 
             for (int attempt = 0; attempt < 100; attempt++)
             {
@@ -163,14 +165,27 @@ namespace RoyalMatch.Levels
             throw new InvalidOperationException("Unable to generate a board with at least one valid move");
         }
 
-        private static LevelDataObjective[] GetValidObjectives(int levelNumber, Difficulty difficulty, DeterministicRNG rng, int obstacleCount, int moveLimit)
+        private static LevelDataObjective[] GetValidObjectives(int levelNumber, Difficulty difficulty, DeterministicRNG rng, int obstacleCount, int moveLimit, int colorCount)
         {
-            return new[] { new LevelDataObjective
+            var objectives = new List<LevelDataObjective> { new LevelDataObjective
             {
                 Type = "remove_blocker",
                 Description = "Elimina obstáculos",
                 Target = obstacleCount,
             }};
+            if (levelNumber >= 4 && levelNumber % 100 != 0)
+            {
+                string[] colors = { "RED", "BLUE", "GREEN", "YELLOW" };
+                objectives.Add(new LevelDataObjective
+                {
+                    Type = "collect_color",
+                    Description = "Reúne gemas",
+                    Color = colors[levelNumber % colorCount],
+                    Target = difficulty == Difficulty.SUPER_HARD ? 24 :
+                        difficulty == Difficulty.HARD ? 18 : 12,
+                });
+            }
+            return objectives.ToArray();
         }
 
         private static (int star1, int star2, int star3) ComputeStarThresholds(int moveLimit, LevelDataObjective[] objectives, Difficulty difficulty)
@@ -198,14 +213,15 @@ namespace RoyalMatch.Levels
 
             var difficulty = DifficultySystem.GetDifficulty(levelNumber);
             int moveLimit = DifficultySystem.ComputeMoveLimit(levelNumber);
+            int colorCount = levelNumber > 30 && levelNumber % 11 == 0 ? 3 : 4;
             var spec = ObstacleSpecs[difficulty];
 
             var board = CreateEmptyBoard(DifficultySystem.GridRows, DifficultySystem.GridCols);
 
             var (obstacleCells, _) = PlaceObstacles(board, rng, spec, DifficultySystem.GridRows, DifficultySystem.GridCols);
-            FillGems(board, rng, DifficultySystem.GridRows, DifficultySystem.GridCols);
+            FillGems(board, rng, DifficultySystem.GridRows, DifficultySystem.GridCols, colorCount);
 
-            var objectives = GetValidObjectives(levelNumber, difficulty, rng, obstacleCells, moveLimit);
+            var objectives = GetValidObjectives(levelNumber, difficulty, rng, obstacleCells, moveLimit, colorCount);
             var (star1, star2, star3) = ComputeStarThresholds(moveLimit, objectives, difficulty);
 
             string[] prefixes = { "", "", "", "The", "A", "Mystic", "Hidden", "Ancient" };
@@ -232,12 +248,7 @@ namespace RoyalMatch.Levels
                 Difficulty.EASY => 5,
                 _ => 10,
             };
-            int stars = difficulty switch
-            {
-                Difficulty.SUPER_HARD => 3,
-                Difficulty.HARD => 2,
-                _ => 1,
-            };
+            int stars = 1;
 
             string[] unlocks = null;
             if (levelNumber % 50 == 0)
@@ -251,6 +262,8 @@ namespace RoyalMatch.Levels
                 Description = $"Difficulty: {difficulty} | Realm: {realmName}",
                 Grid = new GridData { Cols = DifficultySystem.GridCols, Rows = DifficultySystem.GridRows },
                 MoveLimit = moveLimit,
+                ColorCount = colorCount,
+                IsBonus = levelNumber % 100 == 0,
                 ScoreStar1 = star1,
                 ScoreStar2 = star2,
                 ScoreStar3 = star3,
@@ -268,7 +281,7 @@ namespace RoyalMatch.Levels
             return levelData;
         }
 
-        // Generate all 1000 levels and write to disk
+        // Optional editor export; runtime generates levels deterministically on demand.
         public static void GenerateAllLevels(string outputPath)
         {
             for (int i = 1; i <= DifficultySystem.TotalLevels; i++)
@@ -278,7 +291,7 @@ namespace RoyalMatch.Levels
                 string filename = DifficultySystem.GetLevelFilename(i);
                 string filePath = System.IO.Path.Combine(outputPath, filename);
 
-                string json = JsonUtility.ToJson(levelData, true);
+                string json = JsonConvert.SerializeObject(levelData, Formatting.Indented);
                 System.IO.File.WriteAllText(filePath, json);
             }
         }

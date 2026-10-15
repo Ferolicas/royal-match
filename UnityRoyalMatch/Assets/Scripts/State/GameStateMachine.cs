@@ -10,6 +10,7 @@ using RoyalMatch.Core;
 using RoyalMatch.Levels;
 using RoyalMatch.Types;
 using RoyalMatch.Match3;
+using RoyalMatch.Progress;
 
 namespace RoyalMatch.State
 {
@@ -43,8 +44,8 @@ namespace RoyalMatch.State
         private bool _isLevelLoading = false;
         private List<AnimationStep> _animationSteps = new List<AnimationStep>();
 
-        // Player progress (replaces localStorage)
-        private const string PROGRESS_KEY = "royal_match_progress";
+        private string _attemptId;
+        private bool _outcomeRecorded;
 
         #region Unity Lifecycle
 
@@ -69,16 +70,32 @@ namespace RoyalMatch.State
 
             try
             {
-                if (!IsLevelUnlocked(levelNumber))
+                if (!PlayerProgress.CanStart(levelNumber))
                 {
-                    OnLevelFailed?.Invoke(this, $"Level {levelNumber} is not unlocked");
+                    OnLevelFailed?.Invoke(this, $"Level {levelNumber} is locked or no lives remain");
                     return;
                 }
 
                 var levelData = await LevelLoader.LoadLevel(levelNumber);
                 var state = GameState.Create(levelData);
+                if (levelNumber >= 32)
+                {
+                    int streak = PlayerProgress.Data.WinStreak;
+                    if (streak >= 1)
+                    {
+                        state.StarterSpecials.Add(SpecialType.ROCKET_HORIZONTAL);
+                        state.StarterSpecials.Add(SpecialType.PROPELLER);
+                    }
+                    if (streak >= 2) state.StarterSpecials.Add(SpecialType.BOMB);
+                    if (streak >= 3) state.StarterSpecials.Add(SpecialType.COLOR_BOMB);
+                }
+                state.SuperLightBallActive = levelNumber >= 292 &&
+                    PlayerProgress.Data.SuperLightBallCharge >= 10;
+                state.StarterSpecials.AddRange(PlayerProgress.ConsumeStartingBoosters());
                 GameManagerInstance = new GameManager(state);
                 CurrentState = state;
+                _attemptId = Guid.NewGuid().ToString("N");
+                _outcomeRecorded = false;
                 _animationSteps.Clear();
 
                 OnLevelLoaded?.Invoke(this, EventArgs.Empty);
@@ -123,10 +140,23 @@ namespace RoyalMatch.State
             bool result = GameManagerInstance.TrySwap(r1, c1, r2, c2);
             if (result)
             {
+                PlayerProgress.MarkAttemptStarted(_attemptId, CurrentState.LevelNumber);
                 _animationSteps = new List<AnimationStep>(GameManagerInstance.GetAnimationSteps());
                 SyncState();
             }
             return result;
+        }
+
+        public bool TryUseBooster(string id, int row, int col)
+        {
+            if (GameManagerInstance == null || CurrentState?.Status != GameStatus.WAITING_INPUT ||
+                PlayerProgress.GetBoosterCount(id) <= 0) return false;
+            if (!GameManagerInstance.TryUseBooster(id, row, col)) return false;
+            if (!PlayerProgress.TryUseBooster(id)) return false;
+            PlayerProgress.MarkAttemptStarted(_attemptId, CurrentState.LevelNumber);
+            _animationSteps = new List<AnimationStep>(GameManagerInstance.GetAnimationSteps());
+            SyncState();
+            return true;
         }
 
         public void EndTurn()
@@ -146,7 +176,7 @@ namespace RoyalMatch.State
 
         public void NextLevel()
         {
-            if (CurrentState != null && CurrentState.LevelNumber < 1000)
+            if (CurrentState != null && CurrentState.LevelNumber < DifficultySystem.TotalLevels)
             {
                 LoadLevel(CurrentState.LevelNumber + 1);
             }
@@ -178,24 +208,51 @@ namespace RoyalMatch.State
 
         #region Player Progress
 
-        public int GetLevelStars(int levelNumber)
+        public int GetLevelStars(int levelNumber) => PlayerProgress.GetLevelStars(levelNumber);
+        public bool IsLevelUnlocked(int levelNumber) => PlayerProgress.IsUnlocked(levelNumber);
+
+        public void CommitOutcome()
         {
-            string key = $"level_{levelNumber}_stars";
-            return PlayerPrefs.GetInt(key, 0);
+            if (_outcomeRecorded || CurrentState == null) return;
+            if (CurrentState.Status == GameStatus.WIN)
+            {
+                _outcomeRecorded = PlayerProgress.RecordWin(_attemptId, CurrentState.LevelNumber,
+                    CurrentState.Difficulty, GameState.GetStarsEarned(CurrentState), CurrentState.MovesRemaining,
+                    CurrentState.RocketsCreated, CurrentState.TntCreated, CurrentState.PropellersCreated,
+                    CurrentState.LightballsCreated, CurrentState.CombosMade);
+            }
+            else if (CurrentState.Status == GameStatus.LOSE)
+            {
+                _outcomeRecorded = PlayerProgress.RecordLoss(_attemptId, CurrentState.LevelNumber);
+            }
         }
 
-        public void SetLevelStars(int levelNumber, int stars)
+        public void CommitAbandonment()
         {
-            string key = $"level_{levelNumber}_stars";
-            int previous = PlayerPrefs.GetInt(key, 0);
-            PlayerPrefs.SetInt(key, Math.Max(previous, stars));
-            PlayerPrefs.Save();
+            if (_outcomeRecorded || CurrentState == null ||
+                CurrentState.Status == GameStatus.WIN) return;
+            if (CurrentState.Status == GameStatus.LOSE ||
+                CurrentState.MovesRemaining < CurrentState.MoveLimit)
+            {
+                _outcomeRecorded = PlayerProgress.RecordLoss(_attemptId, CurrentState.LevelNumber);
+            }
         }
 
-        public bool IsLevelUnlocked(int levelNumber)
+        private void OnApplicationQuit()
         {
-            if (levelNumber == 1) return true;
-            return GetLevelStars(levelNumber - 1) > 0;
+            if (CurrentState?.Status == GameStatus.LOSE) CommitOutcome();
+        }
+
+        public bool TryBuyExtraMoves(int cost = 900, int moves = 5)
+        {
+            if (CurrentState == null || CurrentState.Status != GameStatus.LOSE ||
+                _outcomeRecorded || !PlayerProgress.TrySpendCoins(cost)) return false;
+            CurrentState.MovesRemaining += moves;
+            CurrentState.MoveLimit += moves;
+            CurrentState.Status = GameStatus.WAITING_INPUT;
+            _animationSteps.Clear();
+            EmitStateChanged();
+            return true;
         }
 
         #endregion

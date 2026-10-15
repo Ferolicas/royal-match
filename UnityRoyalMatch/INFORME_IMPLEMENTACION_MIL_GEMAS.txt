@@ -1,0 +1,108 @@
+INFORME DE IMPLEMENTACIÓN — MIL GEMAS
+Fecha: 15 de octubre de 2026
+Proyecto: Unity 6000.0.84f1, /home/ferney_oliveros/LAGUNA/UnityRoyalMatch
+
+ALCANCE
+Se adaptó la lógica de progresión, niveles, dificultad, economía y retención al
+juego propio. Se conservaron las escenas, el palacio, las gemas, los personajes,
+los efectos, la tipografía y la identidad visual de Mil Gemas. La investigación
+de Royal Match está en INFORME_INGENIERIA_INVERSA_ROYAL_MATCH_38911.txt.
+Esta implementación reproduce patrones de juego observados, con tableros
+originales y reglas locales propias. No incorpora el contenido exacto, el
+servicio remoto ni los numerosos obstáculos específicos del juego analizado.
+
+1. NIVELES Y DIFICULTAD
+- Catálogo determinista de 14.700 niveles, generado bajo demanda a partir de
+  la semilla del número de nivel; no se cargan los JSON antiguos de 1.000
+  niveles durante la partida.
+- Tablero de 9 columnas por 11 filas, cuatro colores normalmente y tres cada
+  undécimo nivel después del 30. El generador evita combinaciones iniciales y
+  exige al menos un movimiento válido.
+- Primeros dos niveles fáciles. Niveles 39 y 49 difíciles; desde entonces,
+  terminación en 5 difícil y terminación en 9 superdifícil.
+- Entre 18 y 35 movimientos, con base decreciente por tramo de progreso,
+  variación determinista y pequeña compensación para niveles especiales.
+- Obstáculos iniciales: 3/5/8/12 en fácil/normal/difícil/superdifícil.
+  Familias implementadas: caja, jaula, hielo y piedra.
+- Objetivo inicial de eliminar obstáculos. Desde nivel 4, objetivo adicional
+  de recoger un color, salvo cada nivel 100 que funciona como nivel de bono.
+- Cohete, TNT, hélice, bola de luz y combinaciones existentes se mantienen.
+  Ante un tablero sin jugadas se intenta mezclarlo automáticamente.
+
+2. PROGRESO Y PARTIDAS
+- Se desbloquea el nivel siguiente al ganar. Cada primera victoria entrega
+  una estrella de restauración, monedas y llaves del pase; repetir un nivel
+  puede mejorar su valoración sin repetir los premios de primera victoria.
+- Vidas máximas: 5 por defecto, 8 con pase premium; una vida vuelve cada 30
+  minutos. Las derrotas y los intentos interrumpidos después de una jugada
+  descuentan una vida. Se pueden recargar vidas con monedas.
+- Las partidas registran un ID de intento para evitar premios o pérdidas
+  duplicadas. Se guarda el resultado ganado antes de la animación final.
+- Se migran las estrellas de los antiguos PlayerPrefs al perfil nuevo.
+  El perfil se guarda en dos ranuras con versión, revisión y suma de
+  comprobación. Esto ayuda frente a escrituras incompletas; no protege
+  contra manipulación deliberada del dispositivo.
+- La selección de niveles ahora muestra páginas de 20 en vez de crear miles
+  de botones. El botón Jugar abre el mayor nivel desbloqueado.
+
+3. ECONOMÍA, POTENCIADORES Y RETENCIÓN
+- Monedas de inicio: 500. Primera victoria normal: 15; difícil: 25;
+  superdifícil: 40; bono de nivel 100: 85 adicionales.
+- Continuar una derrota con cinco movimientos extra cuesta 900 monedas.
+- Tienda de monedas del juego: vidas, martillo, flecha, cañón, sombrero,
+  cohete inicial, TNT inicial y bola de luz inicial. Los cuatro primeros
+  actúan durante el nivel sin gastar movimiento. Los tres últimos se
+  equipan desde la tienda y se consumen al cargar un nivel.
+- Racha del mayordomo desde nivel 32: regalos de especiales en el tablero
+  por una, dos y tres victorias consecutivas; la derrota reinicia la racha.
+- Superbola de luz desde nivel 292: carga hasta 10 victorias y amplía la
+  activación de la bola de luz; se pierde con derrota.
+- Áreas de restauración con 20 tareas que consumen estrellas y entregan
+  monedas al cerrar el área.
+- Diez misiones semanales con progreso y cobro explícito de recompensas.
+- Pase mensual de 30 etapas con pista gratis, pista premium, monedas,
+  potenciadores y límite de vidas premium. No se renueva automáticamente.
+
+4. COMPRAS DE GOOGLE PLAY Y APP STORE
+- Unity IAP 5.4.4 instalado y puente preparado para Android e iOS.
+- IDs previstos: milgemas.coins.small, milgemas.coins.medium,
+  milgemas.coins.large, milgemas.pass.monthly.
+- Los botones de dinero real están desactivados. StoreSettings.asset tiene
+  EnableRealMoneyPurchases=0 y VerificationUrl vacía. No hay cargo real.
+- Cuando se activen, el cliente enviará recibo, producto, transacción y
+  plataforma a un servicio HTTPS. El producto solo se entrega si el servicio
+  responde que el recibo es válido y coincide con la orden. La transacción se
+  registra antes de confirmarla para evitar dobles entregas.
+- Faltan las cuentas de Google Play Console y App Store Connect, registrar
+  los IDs, un servicio propio de validación de recibos y una identidad de
+  usuario/backend para restauración entre dispositivos. STORE_SETUP.md
+  detalla el contrato y los pasos de activación. PlayerPrefs por sí solo
+  no sirve como libro contable de compras reales.
+
+5. INTERFAZ Y DISEÑO
+- Se añadieron botones Tienda y Misiones al menú existente y un panel de
+  economía con el mismo tema violeta y dorado. El HUD muestra monedas y
+  cuatro potenciadores de uso inmediato en el lateral izquierdo para no
+  tapar el tablero. Se sustituyeron símbolos no soportados por la fuente.
+- El panel de derrota permite continuar o reintentar. El diseño artístico,
+  el palacio y las piezas del proyecto permanecen.
+
+6. VERIFICACIÓN
+- Unity compiló el proyecto y generó un ejecutable Linux de Mil Gemas.
+- 95/95 pruebas EditMode de Unity superadas, incluida idempotencia de
+  recompensas, consumo de potenciadores y varios puntos del calendario.
+- 20/20 pruebas del comprobador manual superadas.
+- Barrido de los 14.700 niveles: esquema válido, dificultad esperada,
+  tablero sin combinaciones iniciales y al menos una jugada disponible.
+- Arranque visual del ejecutable Linux confirmado. Se comprobó el menú y el
+  tablero; los botones de dinero real siguen pendientes por decisión del
+  propietario y no se han probado transacciones de Google/Apple.
+
+LIMITACIONES DE FIDELIDAD
+La investigación muestra que Royal Match utiliza muchas más familias de
+metas y obstáculos, configuraciones remotas, eventos y tableros de varias
+formas. Mil Gemas mantiene sus cuatro bloqueadores y el tablero 9x11 actual.
+Los 14.700 niveles de este proyecto son generados con una regla reproducible,
+no copias ni equivalentes de las 14.700 definiciones analizadas. La curva de
+victorias aún no se ha calibrado con sesiones reales y puede requerir ajuste
+de movimientos y metas según telemetría de jugadores.

@@ -22,6 +22,14 @@ namespace RoyalMatch.Core
         public string[][] BoardLayout;
         public int GridCols;
         public int GridRows;
+        public int GemTypes;
+        public bool SuperLightBallActive;
+        public List<SpecialType> StarterSpecials = new List<SpecialType>();
+        public int RocketsCreated;
+        public int TntCreated;
+        public int PropellersCreated;
+        public int LightballsCreated;
+        public int CombosMade;
         public List<Match> LastMatches;
         public int ScoreAdded;
         public bool IsAnimating;
@@ -52,6 +60,7 @@ namespace RoyalMatch.Core
                 BoardLayout = levelData.BoardLayout,
                 GridCols = levelData.Grid.Cols,
                 GridRows = levelData.Grid.Rows,
+                GemTypes = levelData.ColorCount > 0 ? levelData.ColorCount : 6,
                 LastMatches = new List<Match>(),
                 ScoreAdded = 0,
                 IsAnimating = false,

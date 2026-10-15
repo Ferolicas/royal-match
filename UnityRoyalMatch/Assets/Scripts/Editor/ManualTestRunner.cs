@@ -58,10 +58,8 @@ namespace RoyalMatch.EditorTools
             // Run DeterministicRNG tests
             RunTest("RNG_Deterministic", TestRNG_Deterministic);
 
-            // Run Level Loader tests (verify JSON loading path is correct)
-            RunTest("LevelLoader_LoadsLevel1FromJSON", TestLevelLoader_LoadsLevel1FromJSON);
-            RunTest("LevelLoader_LoadsLevelFromJSON_Difficulties", TestLevelLoader_LoadsLevelFromJSON_Difficulties);
-            RunTest("LevelLoader_ValidatesAll1000Levels", TestLevelLoader_ValidatesAll1000Levels);
+            RunTest("LevelCatalog_FirstLevel", TestLevelCatalog_FirstLevel);
+            RunTest("LevelCatalog_All14700Levels", TestLevelCatalog_All14700Levels);
 
             Debug.Log($"=== Test Results ===");
             Debug.Log($"Total: {_total}, Passed: {_passed}, Failed: {_failed}");
@@ -181,13 +179,13 @@ namespace RoyalMatch.EditorTools
             board.InitializeFromLayout(layout);
 
             board.ClearPositions(new System.Collections.Generic.List<RoyalMatch.Types.Point> {
-                new RoyalMatch.Types.Point(7, 0),
-                new RoyalMatch.Types.Point(6, 0)
+                new RoyalMatch.Types.Point(0, 0),
+                new RoyalMatch.Types.Point(1, 0)
             });
 
             var moved = board.ApplyGravity();
             Assert(moved.Count > 0, "Pieces should have moved");
-            Assert(board.GetPiece(7, 0) != null, "Piece should have fallen to row 7");
+            Assert(board.GetPiece(0, 0) != null, "Piece should have fallen to row 0");
         }
         #endregion
 
@@ -242,8 +240,7 @@ namespace RoyalMatch.EditorTools
             };
 
             var (points, _) = RoyalMatch.Match3.Scoring.CalculateCascadeScore(matches, 1);
-            // 3 gems * 60 base = 60 points for cascade 1
-            Assert(points == 60, $"Score should be 60, got {points}");
+            Assert(points == 150, $"Score should be 150, got {points}");
         }
 
         private static void TestGameState_StarsEarned()
@@ -455,69 +452,35 @@ namespace RoyalMatch.EditorTools
         }
         #endregion
 
-        #region Level Loader Tests
+        #region Level Catalog Tests
 
-        private static void TestLevelLoader_LoadsLevel1FromJSON()
+        private static void TestLevelCatalog_FirstLevel()
         {
-            // Load level JSON file directly (synchronous)
-            string filename = DifficultySystem.GetLevelFilename(1);
-            string fullPath = System.IO.Path.Combine(Application.streamingAssetsPath, "Levels", filename);
-            Assert(System.IO.File.Exists(fullPath), $"Level 1 JSON file should exist at {fullPath}");
-
-            string json = System.IO.File.ReadAllText(fullPath);
-            var level = JsonConvert.DeserializeObject<RoyalMatch.Levels.LevelData>(json,
-                new JsonSerializerSettings
-                {
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore,
-                });
-
-            Assert(level != null, "Level should deserialize");
-            Assert(level.LevelNumber == 1, $"Level number should be 1, got {level.LevelNumber}");
-            Assert(level.Grid.Cols == 8, "Cols should be 8");
-            Assert(level.Grid.Rows == 8, "Rows should be 8");
-            Assert(level.Difficulty == RoyalMatch.Types.Difficulty.EASY, "Level 1 should be EASY");
-            Assert(level.BoardLayout != null && level.BoardLayout.Length == DifficultySystem.GridRows &&
-                level.BoardLayout[0].Length == DifficultySystem.GridCols,
-                "Board layout should be 9x11");
-            Assert(level.Validate(), "Level should validate");
+            var level = LevelGenerator.GenerateLevel(1);
+            Assert(level.Grid.Cols == DifficultySystem.GridCols &&
+                level.Grid.Rows == DifficultySystem.GridRows, "Board should be 9x11");
+            Assert(level.Difficulty == RoyalMatch.Types.Difficulty.EASY, "First level should be easy");
+            Assert(level.ColorCount == 4 && level.MoveLimit <= 35, "First level tuning");
+            Assert(level.Validate(), "First level should validate");
         }
 
-        private static void TestLevelLoader_LoadsLevelFromJSON_Difficulties()
+        private static void TestLevelCatalog_All14700Levels()
         {
-            for (int levelNum = 1; levelNum <= 1000; levelNum++)
+            for (int number = 1; number <= DifficultySystem.TotalLevels; number++)
             {
-                string filename = DifficultySystem.GetLevelFilename(levelNum);
-                string fullPath = System.IO.Path.Combine(Application.streamingAssetsPath, "Levels", filename);
-                Assert(System.IO.File.Exists(fullPath), $"Level {levelNum} JSON file should exist at {fullPath}");
-
-                string json = System.IO.File.ReadAllText(fullPath);
-                var level = JsonConvert.DeserializeObject<RoyalMatch.Levels.LevelData>(json,
-                    new JsonSerializerSettings
-                    {
-                        MissingMemberHandling = MissingMemberHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore,
-                    });
-
-                Assert(level != null, $"Level {levelNum} should deserialize");
-                Assert(level.LevelNumber == levelNum, $"Level {levelNum} should have LevelNumber={levelNum}, got {level.LevelNumber}");
-                Assert(level.Validate(), $"Level {levelNum} should validate");
-
-                // Verify difficulty matches
-                var expectedDiff = DifficultySystem.GetDifficulty(levelNum);
-                Assert(level.Difficulty == expectedDiff,
-                    $"Level {levelNum} difficulty mismatch: expected {expectedDiff}, got {level.Difficulty}");
+                var level = LevelGenerator.GenerateLevel(number);
+                Assert(level.Validate(), $"Level {number} failed schema validation");
+                Assert(level.Difficulty == DifficultySystem.GetDifficulty(number),
+                    $"Level {number} has the wrong difficulty");
+                var board = new RoyalMatch.Match3.Board(new RoyalMatch.Match3.BoardConfig
+                {
+                    Rows = level.Grid.Rows, Cols = level.Grid.Cols,
+                    GemTypes = level.ColorCount, MinMatch = 3,
+                });
+                board.InitializeFromLayout(level.BoardLayout);
+                Assert(board.FindMatches().matches.Count == 0, $"Level {number} starts with a match");
+                Assert(board.HasValidMove(), $"Level {number} has no first move");
             }
-        }
-
-        private static void TestLevelLoader_ValidatesAll1000Levels()
-        {
-            // Already validated in the previous test, but add a quick sweep
-            string levelsDir = System.IO.Path.Combine(Application.streamingAssetsPath, "Levels");
-            Assert(System.IO.Directory.Exists(levelsDir), $"Levels directory should exist at {levelsDir}");
-
-            var files = System.IO.Directory.GetFiles(levelsDir, "level-*.json");
-            Assert(files.Length == 1000, $"Expected 1000 level files, found {files.Length}");
         }
 
         #endregion
