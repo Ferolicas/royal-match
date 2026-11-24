@@ -25,10 +25,7 @@ const GameScreen = lazy(() =>
  */
 export function App() {
   return (
-    <BrowserRouter
-      basename={import.meta.env.BASE_URL.replace(/\/$/, '')}
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       <Routes>
         <Route path="/" element={<SplashScreen />} />
         <Route path="/main-menu" element={<MainMenu />} />
